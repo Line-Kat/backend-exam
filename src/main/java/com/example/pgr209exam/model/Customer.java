@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -17,4 +20,8 @@ public class Customer {
     @SequenceGenerator(name = "customer-sequence-generator", sequenceName = "customer-sequence", allocationSize = 1)
     @Column(name = "customer_id")
     private Long customerId = 0L;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
+    private List<Order> orders = new ArrayList<>();
 }

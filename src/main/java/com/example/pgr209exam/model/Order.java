@@ -1,5 +1,6 @@
 package com.example.pgr209exam.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,9 @@ public class Order {
     @SequenceGenerator(name = "order-sequence-generator", sequenceName = "order-sequence", allocationSize = 1)
     @Column(name = "order_id")
     private Long orderId = 0L;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    @JsonIgnoreProperties("order")
+    private Customer customer;
 }
