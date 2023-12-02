@@ -30,8 +30,10 @@ public class Order {
     //unidirectional
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "machine_id",
-            joinColumns = @JoinColumn(name = "order_id")
+            name = "ORDER_MACHINE",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "machine_id")
     )
     private List<Machine> machines = new ArrayList<>();
+
 }

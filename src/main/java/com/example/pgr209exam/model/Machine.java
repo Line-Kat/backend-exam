@@ -22,16 +22,7 @@ public class Machine {
     private Long machineId = 0L;
 
     //unidirectional
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "machine_id",
-            joinColumns = @JoinColumn(name = "order_id")
-    )
-    private List<Machine> machines = new ArrayList<>();
-
-    //unidirectional
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "machine_id")
+    @JoinColumn(name = "subassembly_id")
     private List<Subassembly> subassemblies = new ArrayList<>();
-
 }
