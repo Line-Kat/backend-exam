@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -17,4 +20,12 @@ public class Subassembly {
     @SequenceGenerator(name = "subassembly-sequence-generator", sequenceName = "subassembly-sequence", allocationSize = 1)
     @Column(name = "subassembly_id")
     private Long subassemblyId = 0L;
+
+    //unidirectional
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "subassembly_id",
+            joinColumns = @JoinColumn(name = "part_id")
+    )
+    private List<Part> parts = new ArrayList<>();
 }
