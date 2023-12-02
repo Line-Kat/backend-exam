@@ -24,8 +24,9 @@ public class Subassembly {
     //unidirectional
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "subassembly_id",
-            joinColumns = @JoinColumn(name = "part_id")
+            name = "SUBASSEMBLY_PART",
+            joinColumns = @JoinColumn(name = "subassembly_id"),
+            inverseJoinColumns = @JoinColumn(name = "part_id")
     )
     private List<Part> parts = new ArrayList<>();
 }
