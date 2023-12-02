@@ -30,7 +30,7 @@ public class Order {
     //unidirectional
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "ORDER_MACHINE",
+            name = "order_machine",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "machine_id")
     )

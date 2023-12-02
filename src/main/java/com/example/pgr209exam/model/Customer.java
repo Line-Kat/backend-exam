@@ -27,7 +27,7 @@ public class Customer {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "CUSTOMER_ADDRESS",
+            name = "customer_address",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id")
     )
