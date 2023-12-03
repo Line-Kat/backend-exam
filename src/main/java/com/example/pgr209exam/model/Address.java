@@ -22,6 +22,13 @@ public class Address {
     @Column(name = "address_id")
     private Long addressId = 0L;
 
+    @Column(name = "address_name")
+    private String addressName;
+
+    public Address(String addressName) {
+        this.addressName = addressName;
+    }
+
     @ManyToMany(mappedBy = "addresses", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Customer> customers = new ArrayList<>();
