@@ -17,4 +17,7 @@ public class Part {
     @SequenceGenerator(name = "part-sequence-generator", sequenceName = "part-sequence", allocationSize = 1)
     @Column(name = "part_id")
     private Long partId = 0L;
+
+    @Column(name = "part_name")
+    private String partName;
 }
