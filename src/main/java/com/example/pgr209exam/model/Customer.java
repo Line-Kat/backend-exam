@@ -21,6 +21,12 @@ public class Customer {
     @Column(name = "customer_id")
     private Long customerId = 0L;
 
+    @Column(name = "customer_name")
+    private String customerName;
+
+    @Column(name = "customer_email")
+    private String customerEmail;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
     private List<Order> orders = new ArrayList<>();

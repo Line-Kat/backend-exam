@@ -21,6 +21,9 @@ public class Machine {
     @Column(name = "machine_id")
     private Long machineId = 0L;
 
+    @Column(name = "machine_name")
+    private String machineName;
+
     //unidirectional
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "subassembly_id")
