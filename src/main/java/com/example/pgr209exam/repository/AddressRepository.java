@@ -1,9 +1,12 @@
 package com.example.pgr209exam.repository;
 
 import com.example.pgr209exam.model.Address;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
+    Page<Address> findAllAddresses(Pageable pageable);
 }
