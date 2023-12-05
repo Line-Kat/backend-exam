@@ -25,7 +25,7 @@ public class AddressService {
 
      */
     public Page<Address> getAddresses(Pageable pageable) {
-        return addressRepository.findAllAddresses(pageable);
+        return addressRepository.findAll(pageable);
     }
 
     public Address getAddressById(Long id) {

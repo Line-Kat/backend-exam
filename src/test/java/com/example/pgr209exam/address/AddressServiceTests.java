@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -22,14 +25,16 @@ public class AddressServiceTests extends DatabaseTests{
 
     @Test
     public void getAddresses_whenExisting_shouldReturn1() {
-        List<Address> addresses = addressService.getAddresses();
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<Address> addressPage = addressService.getAddresses(pageable);
+        long numberOfAddresses = addressPage.getTotalElements();
 
-        Assertions.assertEquals(1, addresses.size());
+        Assertions.assertEquals(1, numberOfAddresses);
     }
 
     @Test
     public void getAddressById_whenExisting_shouldReturnAddress() {
-        Address address = addressService.getAddressById(1L);
+       Address address = addressService.getAddressById(1L);
 
         Assertions.assertEquals("Dronninggata", address.getAddressName());
     }
@@ -38,7 +43,10 @@ public class AddressServiceTests extends DatabaseTests{
     public void createAddress_addingNewAddress_shouldReturnAddress() {
         Address address = new Address("Prinsessealleen");
         Address returnedAddress = addressService.createAddress(address);
-        List<Address> addresses = addressService.getAddresses();
+
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<Address> addressPage = addressService.getAddresses(pageable);
+        List<Address> addresses = addressPage.getContent();
 
         Assertions.assertNotNull(returnedAddress);
         Assertions.assertEquals("Prinsessealleen", returnedAddress.getAddressName());
@@ -57,8 +65,12 @@ public class AddressServiceTests extends DatabaseTests{
     @Test
     public void deleteAddress_deleteExistingAddress_shouldReturnZero() {
         addressService.deleteAddressById(1L);
-        List<Address> addresses = addressService.getAddresses();
 
-        Assertions.assertEquals(0, addresses.size());
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<Address> addressPage = addressService.getAddresses(pageable);
+        Long numberOfAddresses = addressPage.getTotalElements();
+
+        Assertions.assertEquals(0, numberOfAddresses);
     }
+
 }
