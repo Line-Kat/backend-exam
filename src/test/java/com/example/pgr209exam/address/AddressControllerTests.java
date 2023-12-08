@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -30,6 +32,13 @@ public class AddressControllerTests {
     }
 
     @Test
+    public void getAddresses_whenZero_shouldReturnZero() {
+        Address[] addresses = testRestTemplate.getForObject("http://localhost:" + port + "/api/address", Address[].class);
+
+        Assertions.assertEquals(0, addresses.length);
+    }
+
+    @Test
     @Sql("/sql/address.sql")
     public void getAddressById_whenExisting_shouldReturnAddress() {
         Address address = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
@@ -38,17 +47,35 @@ public class AddressControllerTests {
     }
 
     @Test
-    public void getAddresses_whenZero_shouldReturnZero() {
-        Address[] addresses = testRestTemplate.getForObject("http://localhost:" + port + "/api/address", Address[].class);
-
-        Assertions.assertEquals(0, addresses.length);
-    }
-
-    @Test
     public void createAddress_whenExisting_shouldReturnAddress() {
         Address address = testRestTemplate.postForObject("http://localhost:" + port + "/api/address", new Address("Storgata"), Address.class);
 
         Assertions.assertNotNull(address);
         Assertions.assertEquals("Storgata", address.getAddressName());
+    }
+
+    @Test
+    @Sql("/sql/address.sql")
+    public void updateAddress_whenUpdated_shouldReturnUpdatedAddress() {
+        Address address = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
+        Assertions.assertEquals("name", address.getAddressName());
+
+        address.setAddressName("Blomsterbakken");
+        testRestTemplate.put("http://localhost:" + port + "/api/address/1", address);
+
+        Assertions.assertEquals("Blomsterbakken", address.getAddressName());
+    }
+
+    @Test
+    @Sql("/sql/address.sql")
+    public void deleteAddressById_whenDeleted_shouldReturnNull() {
+        Address address = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
+
+        Assertions.assertEquals("name", address.getAddressName());
+
+        testRestTemplate.delete("http://localhost:" + port + "/api/address/1");
+        Address addressAfterDeleting = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
+
+        Assertions.assertNull(addressAfterDeleting);
     }
 }
