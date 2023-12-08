@@ -84,7 +84,6 @@ public class AddressServiceTests extends DatabaseTests{
         Assertions.assertEquals("Rådhusgata", updatedAddress.getAddressName());
     }
 
-    //End-to-end-test
     @Test
     public void deleteAddress_deleteExistingAddress_shouldReturnZero() {
         addAddresses(new Address("Dronninggata"));

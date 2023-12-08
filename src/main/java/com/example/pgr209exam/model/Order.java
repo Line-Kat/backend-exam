@@ -15,6 +15,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order-sequence-generator")
@@ -24,7 +25,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    @JsonIgnoreProperties("order")
+    @JsonIgnoreProperties("orders")
     private Customer customer;
 
     //unidirectional
@@ -35,5 +36,4 @@ public class Order {
             inverseJoinColumns = @JoinColumn(name = "machine_id")
     )
     private List<Machine> machines = new ArrayList<>();
-
 }

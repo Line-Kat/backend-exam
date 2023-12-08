@@ -1,6 +1,5 @@
 package com.example.pgr209exam.service;
 
-import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
