@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -68,9 +70,12 @@ public class AddressControllerTests {
     @Sql("/sql/address.sql")
     public void deleteAddressById_whenDeleted_shouldReturnNull() {
         Address address = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
-        testRestTemplate.delete(String.valueOf(address));
 
+        Assertions.assertEquals("name", address.getAddressName());
 
-        Assertions.assertNull(address);
+        testRestTemplate.delete("http://localhost:" + port + "/api/address/1");
+        Address addressAfterDeleting = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
+
+        Assertions.assertNull(addressAfterDeleting);
     }
 }
