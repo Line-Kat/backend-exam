@@ -1,16 +1,16 @@
 package com.example.pgr209exam.address;
 
 import com.example.pgr209exam.model.Address;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
+
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -25,17 +25,18 @@ public class AddressControllerTests {
     @Test
     @Sql("/sql/address.sql")
     public void getAddresses_whenExisting_shouldReturn1() {
-        Address[] addresses = testRestTemplate.getForObject("http://localhost:" + port + "/api/address", Address[].class);
+        String addresses = testRestTemplate.getForObject("http://localhost:" + port + "/api/address", String.class);
+        Integer totalElements = JsonPath.read(addresses, "$.totalElements");
 
-        Assertions.assertEquals(1, addresses.length);
-        Assertions.assertEquals("name", addresses[0].getAddressName());
+        Assertions.assertEquals(1, totalElements);
     }
 
     @Test
     public void getAddresses_whenZero_shouldReturnZero() {
-        Address[] addresses = testRestTemplate.getForObject("http://localhost:" + port + "/api/address", Address[].class);
+        String addresses = testRestTemplate.getForObject("http://localhost:" + port + "/api/address", String.class);
+        Integer totalElements = JsonPath.read(addresses, "$.totalElements");
 
-        Assertions.assertEquals(0, addresses.length);
+        Assertions.assertEquals(0, totalElements);
     }
 
     @Test
