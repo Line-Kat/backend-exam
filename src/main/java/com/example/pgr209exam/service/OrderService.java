@@ -1,8 +1,11 @@
 package com.example.pgr209exam.service;
 
+import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +19,8 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public List<Order> getOrders() {
-        return orderRepository.findAll();
+    public Page<Order> getOrders(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     public Order getOrderById(Long id) {

@@ -1,8 +1,12 @@
 package com.example.pgr209exam.controller;
 
+import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.service.SubassemblyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +22,13 @@ public class SubassemblyController {
     }
 
     @GetMapping
-    public List<Subassembly> getSubassembly() {
-        return subassemblyService.getSubassemblies();
+    public Page<Subassembly> getSubassemblies() {
+        int pageNumber = 0;
+        int pageSize = 5;
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        return subassemblyService.getSubassemblies(pageable);
     }
 
     @GetMapping("/{id}")

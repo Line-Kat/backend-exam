@@ -1,12 +1,11 @@
 package com.example.pgr209exam.service;
 
-import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Machine;
 import com.example.pgr209exam.repository.MachineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MachineService {
@@ -17,8 +16,8 @@ public class MachineService {
         this.machineRepository = machineRepository;
     }
 
-    public List<Machine> getMachines() {
-        return machineRepository.findAll();
+    public Page<Machine> getMachines(Pageable pageable) {
+        return machineRepository.findAll(pageable);
     }
 
     public Machine getMachineById(Long id) {
