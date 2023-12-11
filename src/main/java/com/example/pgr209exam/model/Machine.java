@@ -24,6 +24,10 @@ public class Machine {
     @Column(name = "machine_name")
     private String machineName;
 
+    public Machine(String machineName) {
+        this.machineName = machineName;
+    }
+
     //unidirectional
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "subassembly_id")
