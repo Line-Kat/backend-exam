@@ -18,12 +18,6 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    /*
-    public List<Address> getAddresses() {
-        return addressRepository.findAll();
-    }
-
-     */
     public Page<Address> getAddresses(Pageable pageable) {
         return addressRepository.findAll(pageable);
     }

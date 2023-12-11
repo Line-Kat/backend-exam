@@ -4,6 +4,8 @@ import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Part;
 import com.example.pgr209exam.repository.PartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class PartService {
         this.partRepository = partRepository;
     }
 
-    public List<Part> getParts() {
-        return partRepository.findAll();
+    public Page<Part> getParts(Pageable pageable) {
+        return partRepository.findAll(pageable);
     }
 
     public Part getPartById(Long id) {

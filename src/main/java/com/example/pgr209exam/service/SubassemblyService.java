@@ -4,6 +4,8 @@ import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.repository.SubassemblyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class SubassemblyService {
         this.subassemblyRepository = subassemblyRepository;
     }
 
-    public List<Subassembly> getSubassemblies() {
-        return subassemblyRepository.findAll();
+    public Page<Subassembly> getSubassemblies(Pageable pageable) {
+        return subassemblyRepository.findAll(pageable);
     }
 
     public Subassembly getSubassemblyById(Long id) {
