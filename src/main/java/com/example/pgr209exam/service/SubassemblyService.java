@@ -1,6 +1,5 @@
 package com.example.pgr209exam.service;
 
-import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.repository.SubassemblyRepository;
 import org.springframework.beans.factory.annotation.Autowired;

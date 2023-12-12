@@ -30,6 +30,5 @@ public class Machine {
 
     //unidirectional
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "subassembly_id")
     private List<Subassembly> subassemblies = new ArrayList<>();
 }
