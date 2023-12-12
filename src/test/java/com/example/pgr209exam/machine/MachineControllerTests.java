@@ -20,7 +20,7 @@ public class MachineControllerTests {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    /*
+
     @Test
     @Sql("/sql/machine.sql")
     public void getMachines_whenExisting_shouldReturn1() {
@@ -30,6 +30,7 @@ public class MachineControllerTests {
         Assertions.assertEquals(1, totalElements);
     }
 
+
     @Test
     public void getMachines_whenZero_shouldReturnZero() {
         String machines = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine", String.class);
@@ -37,8 +38,6 @@ public class MachineControllerTests {
 
         Assertions.assertEquals(0, totalElements);
     }
-
-     */
 
     @Test
     @Sql("/sql/machine.sql")
