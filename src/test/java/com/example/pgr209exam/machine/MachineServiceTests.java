@@ -1,10 +1,7 @@
 package com.example.pgr209exam.machine;
 
-import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Machine;
-import com.example.pgr209exam.repository.AddressRepository;
 import com.example.pgr209exam.repository.MachineRepository;
-import com.example.pgr209exam.service.AddressService;
 import com.example.pgr209exam.service.MachineService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,39 +33,46 @@ public class MachineServiceTests {
 
     @Test
     public void createMachine_addingNewMachine_shouldReturnMachine() {
-        Machine machine = new Machine("Machine2");
+        String machineName = "Machine";
+
+        Machine machine = new Machine(machineName);
         when(machineRepository.save(machine)).thenReturn(machine);
 
         Machine returnedMachine = machineService.createMachine(machine);
 
         Assertions.assertNotNull(returnedMachine);
-        Assertions.assertEquals("Machine2", returnedMachine.getMachineName());
+        Assertions.assertEquals(machineName, returnedMachine.getMachineName());
     }
 
 
     @Test
     public void updateMachine_updateExistingMachine_shouldReturnUpdatedMachine() {
-        Machine machine = new Machine("Machine 1");
+        String originalName = "Machine";
+        String updatedName = "Machine 1";
+        
+        Machine machine = new Machine(originalName);
         when(machineRepository.save(machine)).thenReturn(machine);
 
-        Machine firstMachine = machineService.createMachine(machine);
+        Machine originalMachine = machineService.createMachine(machine);
 
-        Assertions.assertEquals("Machine 1", firstMachine.getMachineName());
+        Assertions.assertEquals(originalName, originalMachine.getMachineName());
 
-        machine.setMachineName("Machine 2");
-        when(machineRepository.save(machine)).thenReturn(machine);
-        Machine updatedMachine = machineService.updateMachine(machine);
+        originalMachine.setMachineName(updatedName);
+        when(machineRepository.save(originalMachine)).thenReturn(originalMachine);
+        Machine updatedMachine = machineService.updateMachine(originalMachine);
 
-        Assertions.assertEquals("Machine 2", updatedMachine.getMachineName());
+        Assertions.assertEquals(updatedName, updatedMachine.getMachineName());
     }
 
     @Test
     public void deleteMachine_deleteExistingMachine_shouldNotFail() {
-        Machine machine = new Machine("Machine");
+        String machineName = "Machine";
+
+        Machine machine = new Machine(machineName);
         when(machineRepository.save(machine)).thenReturn(machine);
         Machine createdMachine = machineService.createMachine(machine);
 
-        Assertions.assertEquals("Machine", createdMachine.getMachineName());
+        Assertions.assertEquals(machineName, createdMachine.getMachineName());
 
         machineService.deleteMachineById(1L);
 
