@@ -28,6 +28,7 @@ public class Subassembly {
         this.subassemblyName = subassemblyName;
     }
 
+
     //unidirectional
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
