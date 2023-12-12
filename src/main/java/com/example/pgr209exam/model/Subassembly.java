@@ -21,6 +21,13 @@ public class Subassembly {
     @Column(name = "subassembly_id")
     private Long subassemblyId = 0L;
 
+    @Column(name = "subassembly_name")
+    private String subassemblyName;
+
+    public Subassembly(String subassemblyName) {
+        this.subassemblyName = subassemblyName;
+    }
+
     //unidirectional
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
