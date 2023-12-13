@@ -15,8 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
@@ -34,21 +36,35 @@ public class AddressServiceTests{
 
 
     //TEST DOESN'T RUN BECAUSE 'addressPage' IS NULL. Why doesn't addressService.getAddresses(pageable) return anything?
-    //Is the implementation of pagination wrong!?
-    /*
+
     @Test
     public void getAddresses_whenExisting_shouldReturn1() {
 
-        List<Address> addresses = List.of(new Address("Dronninggata"), new Address("Prinsessealleen"));
-        when(addressRepository.findAll()).thenReturn(addresses);
+        addressService.createAddress(new Address("Dronninggata"));
+        addressService.createAddress(new Address("Prinsessealleen"));
 
+        List<Address> addressList = new ArrayList<>();
+        addressList.add(new Address("Dronninggata"));
+        addressList.add(new Address("Prinsessealleen"));
+
+        //List<Address> addresses = List.of(new Address("Dronninggata"), new Address("Prinsessealleen"));
+        when(addressRepository.findAll()).thenReturn(addressList);
+
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<Address> addresses = addressService.getAddresses(pageable);
+        List<String> addressNames = addresses.getContent().stream().map(Address::getAddressName).toList();
+
+        Assertions.assertEquals(addressList.size(), addressNames.size());
+
+        /*
         Pageable pageable = PageRequest.of(0, 5);
         Page<Address> addressPage = addressService.getAddresses(pageable);
         long numberOfAddresses = addressPage.getTotalElements();
 
         Assertions.assertEquals(2, numberOfAddresses);
+
+         */
     }
-     */
 
     @Test
     public void getAddressById_whenExisting_shouldReturnAddress() {
