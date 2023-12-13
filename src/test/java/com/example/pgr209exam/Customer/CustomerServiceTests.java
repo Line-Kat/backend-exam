@@ -2,6 +2,7 @@ package com.example.pgr209exam.Customer;
 
 import com.example.pgr209exam.controller.CustomerController;
 import com.example.pgr209exam.model.Customer;
+import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.repository.CustomerRepository;
 import com.example.pgr209exam.service.CustomerService;
 import org.junit.Before;
@@ -28,6 +29,11 @@ public class CustomerServiceTests {
         customerService = mock(CustomerService.class);
         customerController = new CustomerController(customerService);
         customerRepository = mock(CustomerRepository.class);
+    }
+
+    @Test
+    public void getCustomers(){
+
     }
 
     @Test
@@ -75,35 +81,30 @@ public class CustomerServiceTests {
 
     @Test
     public void testUpdateCustomer(){
-        long customerId = 123;
-        // Old Customer
-        Customer existingCustomer = new Customer();
-        existingCustomer.setCustomerId(customerId);
-        existingCustomer.setCustomerName("testOldName");
-        existingCustomer.setCustomerEmail("testOld@email.com");
-
-        // Create a new
-        Customer updatedCustomer = new Customer();
-        updatedCustomer.setCustomerId(customerId);
-        updatedCustomer.setCustomerName("testUpdateName");
-        updatedCustomer.setCustomerEmail("testUpdate@email.com");
-
-
-
-        when(customerRepository.save(existingCustomer)).thenReturn(updatedCustomer);
-        Customer result = customerService.updateCustomer(existingCustomer);
-        verify(customerRepository, times(1)).save(existingCustomer);
+       /** when(customerRepository.save(updatedCustomer)).thenReturn(updatedCustomer);
+        Customer result = customerService.updateCustomer(updatedCustomer);
+        verify(customerRepository, times(1)).save(updatedCustomer);
         assertEquals(updatedCustomer, result);
+        **/
+        Customer customer1 = new Customer();
+        customer1.setCustomerId(1L);
+        customer1.setCustomerName("testOld customer");
 
-        // Print debug
-        //System.out.println("before: " + customerRepository.save(existingCustomer));
-        // when ..
-        // customer
-        // Debugging
-        //System.out.println("After: " + customerRepository.save(existingCustomer));
-        // verify code...
-        //System.out.println("Result: " + result);
-        // assertEquals...
+        Customer customer2 = new Customer();
+        customer2.setCustomerId(2L);
+        customer2.setCustomerName("test new customer");
+
+        Customer exsistingCustomer = new Customer();
+        exsistingCustomer.setCustomerId(1L);
+
+        Customer testUpdateCustomer = new Customer();
+        testUpdateCustomer.setCustomerId(1L);
+        testUpdateCustomer.setCustomerName("new");
+
+        when(customerRepository.save(testUpdateCustomer)).thenReturn(testUpdateCustomer);
+        Customer result1 = customerService.updateCustomer(testUpdateCustomer);
+        verify(customerRepository, times(1)).save(testUpdateCustomer);
+        assertEquals(testUpdateCustomer, result1);
 
 
     }
