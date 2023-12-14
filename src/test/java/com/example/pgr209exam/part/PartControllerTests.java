@@ -23,11 +23,11 @@ public class PartControllerTests {
 
     @Test
     @Sql("/sql/part.sql")
-    public void getParts_whenExisting_shouldReturn1() {
+    public void getParts_whenExisting_shouldReturn2() {
         String parts = testRestTemplate.getForObject("http://localhost:" + port + "/api/part", String.class);
         Integer totalElements = JsonPath.read(parts, "$.totalElements");
 
-        Assertions.assertEquals(1, totalElements);
+        Assertions.assertEquals(2, totalElements);
     }
 
     @Test
@@ -43,27 +43,29 @@ public class PartControllerTests {
     public void getPartById_whenExisting_shouldReturnPart() {
         Part part = testRestTemplate.getForObject("http://localhost:" + port + "/api/part/1", Part.class);
 
-        Assertions.assertEquals("name", part.getPartName());
+        Assertions.assertEquals("part 1", part.getPartName());
     }
 
     @Test
     public void createPart_whenExisting_shouldReturnPart() {
-        Part part = testRestTemplate.postForObject("http://localhost:" + port + "/api/part", new Part("Part"), Part.class);
+        String partName = "part 3";
+        Part part = testRestTemplate.postForObject("http://localhost:" + port + "/api/part", new Part(partName), Part.class);
 
         Assertions.assertNotNull(part);
-        Assertions.assertEquals("Part", part.getPartName());
+        Assertions.assertEquals(partName, part.getPartName());
     }
 
     @Test
     @Sql("/sql/part.sql")
     public void updatePart_whenUpdated_shouldReturnUpdatedPart() {
         Part part = testRestTemplate.getForObject("http://localhost:" + port + "/api/part/1", Part.class);
-        Assertions.assertEquals("name", part.getPartName());
+        Assertions.assertEquals("part 1", part.getPartName());
 
-        part.setPartName("Part");
+        String updatedPartName = "part 2";
+        part.setPartName(updatedPartName);
         testRestTemplate.put("http://localhost:" + port + "/api/part/1", part);
 
-        Assertions.assertEquals("Part", part.getPartName());
+        Assertions.assertEquals(updatedPartName, part.getPartName());
     }
 
     @Test
@@ -71,12 +73,11 @@ public class PartControllerTests {
     public void deletePartById_whenDeleted_shouldNotFail() {
         Part part = testRestTemplate.getForObject("http://localhost:" + port + "/api/part/1", Part.class);
 
-        Assertions.assertEquals("name", part.getPartName());
+        Assertions.assertEquals("part 1", part.getPartName());
 
         testRestTemplate.delete("http://localhost:" + port + "/api/part/1");
         Part partAfterDeleting = testRestTemplate.getForObject("http://localhost:" + port + "/api/part/1", Part.class);
 
         Assertions.assertNull(partAfterDeleting);
     }
-
 }

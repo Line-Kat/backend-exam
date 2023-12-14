@@ -22,10 +22,7 @@ public class AddressService {
         return addressRepository.findAll(pageable);
     }
 
-    public Address getAddressById(Long id) {
-
-        return addressRepository.findById(id).orElse(null);
-    }
+    public Address getAddressById(Long id) { return addressRepository.findById(id).orElse(null); }
 
     public Address createAddress(Address address) {
         return addressRepository.save(address);
@@ -38,5 +35,4 @@ public class AddressService {
     public void deleteAddressById(Long id) {
         addressRepository.deleteById(id);
     }
-
 }

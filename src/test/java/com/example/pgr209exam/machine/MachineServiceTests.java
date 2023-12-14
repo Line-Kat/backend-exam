@@ -23,7 +23,7 @@ public class MachineServiceTests {
     private MachineService machineService;
     @Test
     public void getMachineById_whenExisting_shouldReturnMachine() {
-        Machine machine = new Machine("Machine1");
+        Machine machine = new Machine("Mix master");
         when(machineRepository.findById(1L)).thenReturn(Optional.of(machine));
 
         Machine actualMachine = machineService.getMachineById(1L);
@@ -33,7 +33,7 @@ public class MachineServiceTests {
 
     @Test
     public void createMachine_addingNewMachine_shouldReturnMachine() {
-        String machineName = "Machine";
+        String machineName = "Air fryer";
 
         Machine machine = new Machine(machineName);
         when(machineRepository.save(machine)).thenReturn(machine);
@@ -44,15 +44,13 @@ public class MachineServiceTests {
         Assertions.assertEquals(machineName, returnedMachine.getMachineName());
     }
 
-
     @Test
     public void updateMachine_updateExistingMachine_shouldReturnUpdatedMachine() {
-        String originalName = "Machine";
-        String updatedName = "Machine 1";
+        String originalName = "Sewing machine";
+        String updatedName = "Blender";
         
         Machine machine = new Machine(originalName);
         when(machineRepository.save(machine)).thenReturn(machine);
-
         Machine originalMachine = machineService.createMachine(machine);
 
         Assertions.assertEquals(originalName, originalMachine.getMachineName());
@@ -66,7 +64,7 @@ public class MachineServiceTests {
 
     @Test
     public void deleteMachine_deleteExistingMachine_shouldNotFail() {
-        String machineName = "Machine";
+        String machineName = "Popcorn maker";
 
         Machine machine = new Machine(machineName);
         when(machineRepository.save(machine)).thenReturn(machine);
@@ -75,10 +73,8 @@ public class MachineServiceTests {
         Assertions.assertEquals(machineName, createdMachine.getMachineName());
 
         machineService.deleteMachineById(1L);
-
         Machine deletedMachine = machineService.getMachineById(1L);
 
         Assertions.assertNull(deletedMachine);
     }
-
 }

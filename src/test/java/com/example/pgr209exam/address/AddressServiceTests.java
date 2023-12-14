@@ -4,23 +4,19 @@ import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.repository.AddressRepository;
 import com.example.pgr209exam.service.AddressService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.Assert;
 
-import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
-
-//source for pagination: https://www.javaguides.net/2022/02/spring-data-jpa-pagination-and-sorting.html
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest
 public class AddressServiceTests{
@@ -31,24 +27,18 @@ public class AddressServiceTests{
     @Autowired
     private AddressService addressService;
 
-
-
-    //TEST DOESN'T RUN BECAUSE 'addressPage' IS NULL. Why doesn't addressService.getAddresses(pageable) return anything?
-    //Is the implementation of pagination wrong!?
-    /*
     @Test
-    public void getAddresses_whenExisting_shouldReturn1() {
+    public void getAddresses_whenExisting_shouldReturnPage() {
 
-        List<Address> addresses = List.of(new Address("Dronninggata"), new Address("Prinsessealleen"));
-        when(addressRepository.findAll()).thenReturn(addresses);
+            Page<Address> mockedPage = mock(Page.class);
+            when(addressRepository.findAll(any(Pageable.class))).thenReturn(mockedPage);
 
-        Pageable pageable = PageRequest.of(0, 5);
-        Page<Address> addressPage = addressService.getAddresses(pageable);
-        long numberOfAddresses = addressPage.getTotalElements();
+            Pageable pageable = PageRequest.of(0, 10);
+            Page<Address> result = addressService.getAddresses(pageable);
+            verify(addressRepository, times(1)).findAll(pageable);
 
-        Assertions.assertEquals(2, numberOfAddresses);
+            Assertions.assertEquals(mockedPage, result);
     }
-     */
 
     @Test
     public void getAddressById_whenExisting_shouldReturnAddress() {
@@ -62,41 +52,46 @@ public class AddressServiceTests{
 
     @Test
     public void createAddress_addingNewAddress_shouldReturnAddress() {
-        Address address = new Address("Prinsessealleen");
+        String addressName = "Prinsessealleen";
+
+        Address address = new Address(addressName);
         when(addressRepository.save(address)).thenReturn(address);
 
         Address returnedAddress = addressService.createAddress(address);
 
         Assertions.assertNotNull(returnedAddress);
-        Assertions.assertEquals("Prinsessealleen", returnedAddress.getAddressName());
+        Assertions.assertEquals(addressName, returnedAddress.getAddressName());
     }
 
     @Test
     public void updateAddress_updateExistingAddress_shouldReturnUpdatedAddress() {
-        Address address = new Address("Blåklokkestien");
+        String originalAddressName = "Blåklokkestien";
+        String updatedAddressName = "Rådhusgata";
+
+        Address address = new Address(originalAddressName);
         when(addressRepository.save(address)).thenReturn(address);
+        Address originalAddress = addressService.createAddress(address);
 
-        Address firstAddress = addressService.createAddress(address);
+        Assertions.assertEquals(originalAddressName, originalAddress.getAddressName());
 
-        Assertions.assertEquals("Blåklokkestien", firstAddress.getAddressName());
-
-        address.setAddressName("Rådhusgata");
-        when(addressRepository.save(address)).thenReturn(new Address("Rådhusgata"));
+        address.setAddressName(updatedAddressName);
+        when(addressRepository.save(address)).thenReturn(address);
         Address updatedAddress = addressService.updateAddress(address);
 
-        Assertions.assertEquals("Rådhusgata", updatedAddress.getAddressName());
+        Assertions.assertEquals(updatedAddressName, updatedAddress.getAddressName());
     }
 
     @Test
     public void deleteAddress_deleteExistingAddress_shouldReturnZero() {
-        Address address = new Address("Svingen");
+        String addressName = "Svingen";
+
+        Address address = new Address(addressName);
         when(addressRepository.save(address)).thenReturn(address);
         Address createdAddress = addressService.createAddress(address);
 
-        Assertions.assertEquals("Svingen", createdAddress.getAddressName());
+        Assertions.assertEquals(address, createdAddress);
 
         addressService.deleteAddressById(1L);
-
         Address deletedAddress = addressService.getAddressById(1L);
 
         Assertions.assertNull(deletedAddress);

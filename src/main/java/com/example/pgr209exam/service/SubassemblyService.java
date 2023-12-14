@@ -22,10 +22,7 @@ public class SubassemblyService {
         return subassemblyRepository.findAll(pageable);
     }
 
-    public Subassembly getSubassemblyById(Long id) {
-
-        return subassemblyRepository.findById(id).orElse(null);
-    }
+    public Subassembly getSubassemblyById(Long id) { return subassemblyRepository.findById(id).orElse(null); }
 
     public Subassembly createSubassembly(Subassembly subassembly) {
         return subassemblyRepository.save(subassembly);

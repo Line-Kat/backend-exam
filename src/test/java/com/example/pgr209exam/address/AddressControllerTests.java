@@ -14,7 +14,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-
 public class AddressControllerTests {
     @Value(value = "${local.server.port}")
     private int port;
@@ -24,11 +23,11 @@ public class AddressControllerTests {
 
     @Test
     @Sql("/sql/address.sql")
-    public void getAddresses_whenExisting_shouldReturn1() {
+    public void getAddresses_whenExisting_shouldReturn2() {
         String addresses = testRestTemplate.getForObject("http://localhost:" + port + "/api/address", String.class);
         Integer totalElements = JsonPath.read(addresses, "$.totalElements");
 
-        Assertions.assertEquals(1, totalElements);
+        Assertions.assertEquals(2, totalElements);
     }
 
     @Test
@@ -44,27 +43,32 @@ public class AddressControllerTests {
     public void getAddressById_whenExisting_shouldReturnAddress() {
         Address address = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
 
-        Assertions.assertEquals("name", address.getAddressName());
+        Assertions.assertEquals("Solsikkeengen", address.getAddressName());
     }
 
     @Test
     public void createAddress_whenExisting_shouldReturnAddress() {
-        Address address = testRestTemplate.postForObject("http://localhost:" + port + "/api/address", new Address("Storgata"), Address.class);
+        String addressName = "Storgata";
+
+        Address address = testRestTemplate.postForObject("http://localhost:" + port + "/api/address", new Address(addressName), Address.class);
 
         Assertions.assertNotNull(address);
-        Assertions.assertEquals("Storgata", address.getAddressName());
+        Assertions.assertEquals(addressName, address.getAddressName());
     }
 
     @Test
     @Sql("/sql/address.sql")
     public void updateAddress_whenUpdated_shouldReturnUpdatedAddress() {
-        Address address = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
-        Assertions.assertEquals("name", address.getAddressName());
+        String originalAddressName = "Solsikkeengen";
+        String updatedAddressName = "Blomsterbakken";
 
-        address.setAddressName("Blomsterbakken");
+        Address address = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
+        Assertions.assertEquals(originalAddressName, address.getAddressName());
+
+        address.setAddressName(updatedAddressName);
         testRestTemplate.put("http://localhost:" + port + "/api/address/1", address);
 
-        Assertions.assertEquals("Blomsterbakken", address.getAddressName());
+        Assertions.assertEquals(updatedAddressName, address.getAddressName());
     }
 
     @Test
@@ -72,7 +76,7 @@ public class AddressControllerTests {
     public void deleteAddressById_whenDeleted_shouldReturnNull() {
         Address address = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
 
-        Assertions.assertEquals("name", address.getAddressName());
+        Assertions.assertEquals("Solsikkeengen", address.getAddressName());
 
         testRestTemplate.delete("http://localhost:" + port + "/api/address/1");
         Address addressAfterDeleting = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
