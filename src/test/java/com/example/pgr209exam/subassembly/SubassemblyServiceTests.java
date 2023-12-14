@@ -1,6 +1,5 @@
 package com.example.pgr209exam.subassembly;
 
-import com.example.pgr209exam.model.Part;
 import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.repository.SubassemblyRepository;
 import com.example.pgr209exam.service.SubassemblyService;
@@ -26,19 +25,16 @@ public class SubassemblyServiceTests {
     public void getSubassemblyById_whenExisting_shouldReturnSubassembly() {
         Subassembly subassembly = new Subassembly("subassemblyName");
         when(subassemblyRepository.findById(1L)).thenReturn(Optional.of(subassembly));
-
         Subassembly actualSubassembly = subassemblyService.getSubassemblyById(1L);
 
         Assertions.assertEquals(subassembly, actualSubassembly);
     }
 
     @Test
-    public void createPart_addingNewPart_shouldReturnPart() {
+    public void createPart_addingNewPart_shouldReturnSubassembly() {
         String subassemblyName = "subassemblyName";
-
         Subassembly subassembly = new Subassembly(subassemblyName);
         when(subassemblyRepository.save(subassembly)).thenReturn(subassembly);
-
         Subassembly returnedSubassembly = subassemblyService.createSubassembly(subassembly);
 
         Assertions.assertNotNull(returnedSubassembly);
@@ -52,7 +48,6 @@ public class SubassemblyServiceTests {
 
         Subassembly subassembly = new Subassembly(originalName);
         when(subassemblyRepository.save(subassembly)).thenReturn(subassembly);
-
         Subassembly originalSubassembly = subassemblyService.createSubassembly(subassembly);
 
         Assertions.assertEquals(originalName, originalSubassembly.getSubassemblyName());
@@ -67,7 +62,6 @@ public class SubassemblyServiceTests {
     @Test
     public void deleteSubassembly_deleteExistingSubassembly_shouldNotFail() {
         String subassemblyName = "Subassembly";
-
         Subassembly subassembly = new Subassembly(subassemblyName);
         when(subassemblyRepository.save(subassembly)).thenReturn(subassembly);
         Subassembly createdSubassembly = subassemblyService.createSubassembly(subassembly);
@@ -75,7 +69,6 @@ public class SubassemblyServiceTests {
         Assertions.assertEquals(subassemblyName, createdSubassembly.getSubassemblyName());
 
         subassemblyService.deleteSubassemblyById(1L);
-
         Subassembly deletedSubassembly = subassemblyService.getSubassemblyById(1L);
 
         Assertions.assertNull(deletedSubassembly);

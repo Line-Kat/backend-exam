@@ -25,7 +25,6 @@ public class PartServiceTests {
     public void getPartById_whenExisting_shouldReturnPart() {
         Part part = new Part("Part");
         when(partRepository.findById(1L)).thenReturn(Optional.of(part));
-
         Part actualPart = partService.getPartById(1L);
 
         Assertions.assertEquals(part, actualPart);
@@ -37,11 +36,10 @@ public class PartServiceTests {
 
         Part part = new Part(partName);
         when(partRepository.save(part)).thenReturn(part);
-
         Part returnedPart = partService.createPart(part);
 
         Assertions.assertNotNull(returnedPart);
-        Assertions.assertEquals(partName, returnedPart.getPartName());
+        Assertions.assertEquals(part, returnedPart);
     }
 
     @Test
@@ -51,7 +49,6 @@ public class PartServiceTests {
 
         Part part = new Part(originalName);
         when(partRepository.save(part)).thenReturn(part);
-
         Part originalPart = partService.createPart(part);
 
         Assertions.assertEquals(originalName, originalPart.getPartName());
@@ -71,10 +68,9 @@ public class PartServiceTests {
         when(partRepository.save(part)).thenReturn(part);
         Part createdPart = partService.createPart(part);
 
-        Assertions.assertEquals(partName, createdPart.getPartName());
+        Assertions.assertEquals(part, createdPart);
 
         partService.deletePartById(1L);
-
         Part deletedPart = partService.getPartById(1L);
 
         Assertions.assertNull(deletedPart);

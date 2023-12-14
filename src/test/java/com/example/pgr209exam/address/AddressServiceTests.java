@@ -18,8 +18,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
-//source for pagination: https://www.javaguides.net/2022/02/spring-data-jpa-pagination-and-sorting.html
-
 @SpringBootTest
 public class AddressServiceTests{
 
@@ -54,41 +52,46 @@ public class AddressServiceTests{
 
     @Test
     public void createAddress_addingNewAddress_shouldReturnAddress() {
-        Address address = new Address("Prinsessealleen");
+        String addressName = "Prinsessealleen";
+
+        Address address = new Address(addressName);
         when(addressRepository.save(address)).thenReturn(address);
 
         Address returnedAddress = addressService.createAddress(address);
 
         Assertions.assertNotNull(returnedAddress);
-        Assertions.assertEquals("Prinsessealleen", returnedAddress.getAddressName());
+        Assertions.assertEquals(addressName, returnedAddress.getAddressName());
     }
 
     @Test
     public void updateAddress_updateExistingAddress_shouldReturnUpdatedAddress() {
-        Address address = new Address("Blåklokkestien");
+        String originalAddressName = "Blåklokkestien";
+        String updatedAddressName = "Rådhusgata";
+
+        Address address = new Address(originalAddressName);
         when(addressRepository.save(address)).thenReturn(address);
+        Address originalAddress = addressService.createAddress(address);
 
-        Address firstAddress = addressService.createAddress(address);
+        Assertions.assertEquals(originalAddressName, originalAddress.getAddressName());
 
-        Assertions.assertEquals("Blåklokkestien", firstAddress.getAddressName());
-
-        address.setAddressName("Rådhusgata");
-        when(addressRepository.save(address)).thenReturn(new Address("Rådhusgata"));
+        address.setAddressName(updatedAddressName);
+        when(addressRepository.save(address)).thenReturn(address);
         Address updatedAddress = addressService.updateAddress(address);
 
-        Assertions.assertEquals("Rådhusgata", updatedAddress.getAddressName());
+        Assertions.assertEquals(updatedAddressName, updatedAddress.getAddressName());
     }
 
     @Test
     public void deleteAddress_deleteExistingAddress_shouldReturnZero() {
-        Address address = new Address("Svingen");
+        String addressName = "Svingen";
+
+        Address address = new Address(addressName);
         when(addressRepository.save(address)).thenReturn(address);
         Address createdAddress = addressService.createAddress(address);
 
-        Assertions.assertEquals("Svingen", createdAddress.getAddressName());
+        Assertions.assertEquals(address, createdAddress);
 
         addressService.deleteAddressById(1L);
-
         Address deletedAddress = addressService.getAddressById(1L);
 
         Assertions.assertNull(deletedAddress);

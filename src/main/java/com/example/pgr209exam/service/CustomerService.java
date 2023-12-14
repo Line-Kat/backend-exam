@@ -21,10 +21,7 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Customer getCustomerById(Long id) {
-
-        return customerRepository.findById(id).orElse(null);
-    }
+    public Customer getCustomerById(Long id) { return customerRepository.findById(id).orElse(null); }
 
     public Customer createCustomer(Customer customer) {
         return customerRepository.save(customer);

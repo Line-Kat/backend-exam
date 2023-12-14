@@ -20,10 +20,7 @@ public class MachineService {
         return machineRepository.findAll(pageable);
     }
 
-    public Machine getMachineById(Long id) {
-
-        return machineRepository.findById(id).orElse(null);
-    }
+    public Machine getMachineById(Long id) { return machineRepository.findById(id).orElse(null); }
 
     public Machine createMachine(Machine machine) {
         return machineRepository.save(machine);

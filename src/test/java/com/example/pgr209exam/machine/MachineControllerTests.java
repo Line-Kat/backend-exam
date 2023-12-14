@@ -19,17 +19,14 @@ public class MachineControllerTests {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
-
-
     @Test
     @Sql("/sql/machine.sql")
-    public void getMachines_whenExisting_shouldReturn1() {
+    public void getMachines_whenExisting_shouldReturn2() {
         String machines = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine", String.class);
         Integer totalElements = JsonPath.read(machines, "$.totalElements");
 
-        Assertions.assertEquals(1, totalElements);
+        Assertions.assertEquals(2, totalElements);
     }
-
 
     @Test
     public void getMachines_whenZero_shouldReturnZero() {
@@ -43,28 +40,33 @@ public class MachineControllerTests {
     @Sql("/sql/machine.sql")
     public void getMachineById_whenExisting_shouldReturnMachine() {
         Machine machine = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine/1", Machine.class);
+        Machine machine2 = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine/2", Machine.class);
 
-        Assertions.assertEquals("name", machine.getMachineName());
+        Assertions.assertEquals("sewing machine", machine.getMachineName());
+        Assertions.assertEquals("blender", machine2.getMachineName());
     }
 
     @Test
     public void createMachine_whenExisting_shouldReturnMachine() {
-        Machine machine = testRestTemplate.postForObject("http://localhost:" + port + "/api/machine", new Machine("Machine"), Machine.class);
+        String machineName = "hair dryer";
+
+        Machine machine = testRestTemplate.postForObject("http://localhost:" + port + "/api/machine", new Machine(machineName), Machine.class);
 
         Assertions.assertNotNull(machine);
-        Assertions.assertEquals("Machine", machine.getMachineName());
+        Assertions.assertEquals(machineName, machine.getMachineName());
     }
 
     @Test
     @Sql("/sql/machine.sql")
     public void updateMachine_whenUpdated_shouldReturnUpdatedMachine() {
         Machine machine = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine/1", Machine.class);
-        Assertions.assertEquals("name", machine.getMachineName());
+        Assertions.assertEquals("sewing machine", machine.getMachineName());
 
-        machine.setMachineName("Machine");
+        String updatedMachineName = "Mix master";
+        machine.setMachineName(updatedMachineName);
         testRestTemplate.put("http://localhost:" + port + "/api/machine/1", machine);
 
-        Assertions.assertEquals("Machine", machine.getMachineName());
+        Assertions.assertEquals(updatedMachineName, machine.getMachineName());
     }
 
     @Test
@@ -72,7 +74,7 @@ public class MachineControllerTests {
     public void deleteMachineById_whenDeleted_shouldNotFail() {
         Machine machine = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine/1", Machine.class);
 
-        Assertions.assertEquals("name", machine.getMachineName());
+        Assertions.assertEquals("sewing machine", machine.getMachineName());
 
         testRestTemplate.delete("http://localhost:" + port + "/api/machine/1");
         Machine machineAfterDeleting = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine/1", Machine.class);
