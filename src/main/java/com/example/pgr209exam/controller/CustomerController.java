@@ -3,6 +3,9 @@ package com.example.pgr209exam.controller;
 import com.example.pgr209exam.model.Customer;
 import com.example.pgr209exam.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +21,13 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getCustomers() {
-        return customerService.getCustomers();
+    public Page<Customer> getCustomers() {
+        int pageNumber = 0;
+        int pageSize = 5;
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        return customerService.getCustomers(pageable);
     }
 
     @GetMapping("/{id}")

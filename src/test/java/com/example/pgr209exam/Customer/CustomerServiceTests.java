@@ -8,14 +8,24 @@ import com.example.pgr209exam.service.CustomerService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@SpringBootApplication(scanBasePackages = "com.example.pgr209exam")
 public class CustomerServiceTests {
     @Mock
     private CustomerService customerService;
@@ -27,14 +37,13 @@ public class CustomerServiceTests {
     @Before
     public void setUp(){
         customerService = mock(CustomerService.class);
-        customerController = new CustomerController(customerService);
         customerRepository = mock(CustomerRepository.class);
+        customerController = new CustomerController(customerService);
     }
 
-    @Test
-    public void getCustomers(){
+    // TEST FOR testGetCustomers() is in CustomerControllerInjectMocksTests because it uses injectMocks instead of Mock
+    // each class can use different annotations that make sense for each class/method -s testing requirements.
 
-    }
 
     @Test
     public void testGetCustomerById(){
@@ -47,19 +56,7 @@ public class CustomerServiceTests {
         when(customerService.getCustomerById(testCustomerId)).thenReturn(expectedCustomer);
         Customer response = customerController.getCustomerById(testCustomerId);
         assertEquals(expectedCustomer, response);
-
-        /*
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        ----------med constructor:----------------
-        long customerId = 123;
-        Customer expectedCustomer = new Customer(customerId, "testName", "test@email.com");
-        when(customerService.getCustomerById(customerId)).thenReturn(expectedCustomer);
-        ResponseEntity<Customer> response = customerController.getCustomerById(customerId);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(expectedCustomer, response.getBody());
-         */
-        }
+    }
 
     @Test
     public void testCreateCustomer(){
@@ -78,37 +75,8 @@ public class CustomerServiceTests {
         assertEquals(inputCustomer.getCustomerEmail(), response.getCustomerEmail());
 
     }
-
-    @Test
-    public void testUpdateCustomer(){
-       /** when(customerRepository.save(updatedCustomer)).thenReturn(updatedCustomer);
-        Customer result = customerService.updateCustomer(updatedCustomer);
-        verify(customerRepository, times(1)).save(updatedCustomer);
-        assertEquals(updatedCustomer, result);
-        **/
-        Customer customer1 = new Customer();
-        customer1.setCustomerId(1L);
-        customer1.setCustomerName("testOld customer");
-
-        Customer customer2 = new Customer();
-        customer2.setCustomerId(2L);
-        customer2.setCustomerName("test new customer");
-
-        Customer exsistingCustomer = new Customer();
-        exsistingCustomer.setCustomerId(1L);
-
-        Customer testUpdateCustomer = new Customer();
-        testUpdateCustomer.setCustomerId(1L);
-        testUpdateCustomer.setCustomerName("new");
-
-        when(customerRepository.save(testUpdateCustomer)).thenReturn(testUpdateCustomer);
-        Customer result1 = customerService.updateCustomer(testUpdateCustomer);
-        verify(customerRepository, times(1)).save(testUpdateCustomer);
-        assertEquals(testUpdateCustomer, result1);
-
-
-    }
-
+    // TEST FOR testUpdateCustomer() is in CustomerControllerInjectMocksTests because it uses injectMocks instead of Mock
+    // each class can use different annotations that make sense for each class/method -s testing requirements.
 
 
 
