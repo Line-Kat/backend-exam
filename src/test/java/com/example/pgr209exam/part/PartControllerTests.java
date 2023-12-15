@@ -1,15 +1,21 @@
 package com.example.pgr209exam.part;
 
 import com.example.pgr209exam.model.Part;
+import com.example.pgr209exam.repository.MachineRepository;
+import com.example.pgr209exam.repository.PartRepository;
 import com.jayway.jsonpath.JsonPath;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -20,6 +26,11 @@ public class PartControllerTests {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+
+    @AfterEach
+    void clearDatabase(@Autowired PartRepository partRepository) {
+        partRepository.deleteAll();
+    }
 
     @Test
     @Sql("/sql/part.sql")

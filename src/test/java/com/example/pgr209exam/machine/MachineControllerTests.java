@@ -1,15 +1,20 @@
 package com.example.pgr209exam.machine;
 
 import com.example.pgr209exam.model.Machine;
+import com.example.pgr209exam.repository.MachineRepository;
 import com.jayway.jsonpath.JsonPath;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -19,6 +24,10 @@ public class MachineControllerTests {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+    @AfterEach
+    void clearDatabase(@Autowired MachineRepository machineRepository) {
+        machineRepository.deleteAll();
+    }
     @Test
     @Sql("/sql/machine.sql")
     public void getMachines_whenExisting_shouldReturn2() {
