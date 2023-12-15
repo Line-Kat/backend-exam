@@ -1,20 +1,20 @@
 package com.example.pgr209exam.order;
+
 import com.example.pgr209exam.controller.OrderController;
 import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import static org.mockito.Mockito.*;
 
 
@@ -22,16 +22,11 @@ import static org.mockito.Mockito.*;
 @AutoConfigureMockMvc
 public class OrderControllerTests {
 
-    @Value(value = "${local.server.port}")
-    private int port;
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private OrderService orderService;
-    @InjectMocks
-    private OrderController orderController;
 
     @Test
     public void testGetOrders() throws Exception{
