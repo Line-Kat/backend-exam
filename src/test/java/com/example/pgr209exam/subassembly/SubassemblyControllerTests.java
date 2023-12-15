@@ -1,13 +1,16 @@
 package com.example.pgr209exam.subassembly;
 
 import com.example.pgr209exam.model.Subassembly;
+import com.example.pgr209exam.repository.SubassemblyRepository;
 import com.jayway.jsonpath.JsonPath;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -20,6 +23,11 @@ public class SubassemblyControllerTests {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+
+    @AfterEach
+    void clearDatabase(@Autowired SubassemblyRepository subassemblyRepository) {
+        subassemblyRepository.deleteAll();
+    }
 
     @Test
     @Sql("/sql/subassembly.sql")
