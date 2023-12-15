@@ -4,6 +4,8 @@ import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
 import com.example.pgr209exam.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +19,10 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
+    public Page<Customer> getCustomers(Pageable pageable) {
+        return customerRepository.findAll(pageable);
     }
+
 
     public Customer getCustomerById(Long id) { return customerRepository.findById(id).orElse(null); }
 
@@ -34,4 +37,6 @@ public class CustomerService {
     public void deleteCustomerById(Long id) {
         customerRepository.deleteById(id);
     }
+
+
 }
