@@ -1,7 +1,12 @@
 package com.example.pgr209exam.Customer;
 
+import com.example.pgr209exam.controller.CustomerController;
+import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
+import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.repository.CustomerRepository;
+import com.example.pgr209exam.service.CustomerService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +19,17 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class CustomerControllerTests {
 
     @Value(value = "${local.server.port}")
@@ -117,6 +128,28 @@ public class CustomerControllerTests {
 
         testRestTemplate.delete("http://localhost:" + port + "/api/customer/" + customer.getCustomerId());
         assertFalse(customerRepository.existsById(customer.getCustomerId()));
+    }
+
+    @Autowired
+    private CustomerController customerController;
+
+    @Test
+    public void addAddressToCustomer_newAddressIsAddedToCustomer_shouldReturnNewAddress() {
+        Customer customer = new Customer();
+        customer.setCustomerId(12345L);
+        customer.setCustomerName("Mari");
+        customer.setCustomerEmail("testCustomer@email.com");
+        when(customerRepository.save(ArgumentMatchers.any(Customer.class))).thenReturn(customer);
+
+        Assertions.assertEquals("Mari", customer.getCustomerName());
+
+        Address address = new Address("Ny");
+        Customer returnedCustomer = customerController.addAddressToCustomer(customer, address);
+
+        Assertions.assertEquals(1, returnedCustomer.getAddresses().size());
+
+        int numberOfAddresses = returnedCustomer.getAddresses().size();
+        Assertions.assertEquals(1, numberOfAddresses);
     }
 }
 

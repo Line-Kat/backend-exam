@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -39,4 +40,12 @@ public class CustomerService {
     }
 
 
+
+    public Customer addAddressToCustomer(Customer customer, Address address) {
+        List<Address> addresses = customer.getAddresses();
+        addresses.add(address);
+        customer.setAddresses(addresses);
+
+        return customerRepository.save(customer);
+    }
 }
