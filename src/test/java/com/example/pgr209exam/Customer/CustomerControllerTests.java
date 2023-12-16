@@ -129,5 +129,31 @@ public class CustomerControllerTests {
         testRestTemplate.delete("http://localhost:" + port + "/api/customer/" + customer.getCustomerId());
         assertFalse(customerRepository.existsById(customer.getCustomerId()));
     }
+
+    @Autowired
+    private CustomerController customerController;
+
+    @Test
+    public void addAddressToCustomer_newAddressIsAddedToCustomer_shouldReturnNewAddress() {
+        Customer customer = new Customer();
+        customer.setCustomerId(12345L);
+        customer.setCustomerName("Mari");
+        customer.setCustomerEmail("testCustomer@email.com");
+        when(customerRepository.save(ArgumentMatchers.any(Customer.class))).thenReturn(customer);
+
+        Assertions.assertEquals("Mari", customer.getCustomerName());
+
+        String newAddressName = "Granlia";
+        Address address = new Address(newAddressName);
+        Customer returnedCustomer = customerController.addAddressToCustomer(customer, address);
+
+        int numberOfAddresses = returnedCustomer.getAddresses().size();
+        Assertions.assertEquals(1, numberOfAddresses);
+
+        List<Address> addresses = returnedCustomer.getAddresses();
+        Address newAddress = addresses.get(0);
+
+        Assertions.assertEquals(newAddressName, newAddress.getAddressName());
+    }
 }
 
