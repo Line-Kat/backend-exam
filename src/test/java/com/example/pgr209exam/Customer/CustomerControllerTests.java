@@ -1,5 +1,6 @@
 package com.example.pgr209exam.Customer;
 
+import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
 import com.example.pgr209exam.service.CustomerService;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -16,6 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
 public class CustomerControllerTests {
 
@@ -68,7 +71,6 @@ public class CustomerControllerTests {
         verify(customerService, times(1)).updateCustomer(any(Customer.class));
     }
 
-
     @Test
     public void testDeleteCustomerById() throws Exception {
         long customerId = 1L;
@@ -76,6 +78,18 @@ public class CustomerControllerTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         verify(customerService, times(1)).deleteCustomerById(customerId);
+    }
+
+    @Test
+    public void addAddressToCustomer_newAddressIsAddedToCustomer_shouldReturnNewAddress() throws Exception {
+        Customer customer = new Customer();
+        customer.setCustomerId(1L);
+        when(customerService.updateCustomer(any(Customer.class))).thenReturn(customer);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/customer/1/address")
+                        .content("{}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(customerService, times(1)).addAddressToCustomer(anyLong(), any(Address.class));
     }
 }
 

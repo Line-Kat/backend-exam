@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
@@ -23,7 +25,6 @@ public class CustomerService {
     public Page<Customer> getCustomers(Pageable pageable) {
         return customerRepository.findAll(pageable);
     }
-
 
     public Customer getCustomerById(Long id) { return customerRepository.findById(id).orElse(null); }
 
@@ -50,5 +51,12 @@ public class CustomerService {
         customerRepository.deleteById(id);
     }
 
+    public Customer addAddressToCustomer(Long id, Address address) {
+        Customer customer = getCustomerById(id);
+        List<Address> addresses = customer.getAddresses();
+        addresses.add(address);
+        customer.setAddresses(addresses);
 
+        return customerRepository.save(customer);
+    }
 }

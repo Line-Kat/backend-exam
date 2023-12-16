@@ -1,5 +1,6 @@
 package com.example.pgr209exam.controller;
 
+import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
 import com.example.pgr209exam.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,10 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public void deleteCustomerById(@PathVariable Long id) {
         customerService.deleteCustomerById(id);
+    }
+
+    @PutMapping("/{id}/address")
+    public Customer addAddressToCustomer(@RequestBody Address address, @PathVariable Long id) {
+        return customerService.addAddressToCustomer(id, address);
     }
 }
