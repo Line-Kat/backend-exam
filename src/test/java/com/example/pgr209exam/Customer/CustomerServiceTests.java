@@ -2,101 +2,123 @@ package com.example.pgr209exam.Customer;
 
 import com.example.pgr209exam.controller.CustomerController;
 import com.example.pgr209exam.model.Customer;
-import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.repository.CustomerRepository;
 import com.example.pgr209exam.service.CustomerService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
-@ExtendWith(MockitoExtension.class)
+
 @SpringBootTest
-@SpringBootApplication(scanBasePackages = "com.example.pgr209exam")
-public class CustomerServiceTests {
-    @Mock
-    private CustomerService customerService;
+class CustomerServiceTests {
 
     @Mock
     private CustomerRepository customerRepository;
+
+    @InjectMocks
+    private CustomerService customerService;
+
     private CustomerController customerController;
 
-    @Before
-    public void setUp(){
-        customerService = mock(CustomerService.class);
-        customerRepository = mock(CustomerRepository.class);
+    @BeforeEach
+    void setUp() {
         customerController = new CustomerController(customerService);
     }
 
-    // TEST FOR testGetCustomers() is in CustomerControllerInjectMocksTests because it uses injectMocks instead of Mock
-    // each class can use different annotations that make sense for each class/method -s testing requirements.
-
+    @Test
+    void testGetCustomers() {
+        Page<Customer> mockedPage = mock(Page.class);
+        when(customerRepository.findAll(any(Pageable.class))).thenReturn(mockedPage);
+        Page<Customer> result = customerService.getCustomers(PageRequest.of(0, 5));
+        verify(customerRepository, times(1)).findAll(any(Pageable.class));
+        assertEquals(mockedPage, result);
+    }
 
     @Test
-    public void testGetCustomerById(){
+    void testGetCustomerById() {
         long testCustomerId = 123;
         Customer expectedCustomer = new Customer();
         expectedCustomer.setCustomerId(testCustomerId);
         expectedCustomer.setCustomerName("test1");
         expectedCustomer.setCustomerEmail("test@email.com");
 
-        when(customerService.getCustomerById(testCustomerId)).thenReturn(expectedCustomer);
-        Customer response = customerController.getCustomerById(testCustomerId);
+        when(customerRepository.findById(testCustomerId)).thenReturn(Optional.of(expectedCustomer));
+        Customer response = customerService.getCustomerById(testCustomerId);
         assertEquals(expectedCustomer, response);
     }
 
     @Test
-    public void testCreateCustomer(){
+    void testCreateCustomer() {
         Customer inputCustomer = new Customer();
         inputCustomer.setCustomerId(null);
         inputCustomer.setCustomerName("test1");
         inputCustomer.setCustomerEmail("test@email.com");
 
-        when(customerService.createCustomer(inputCustomer)).thenReturn(inputCustomer);
-
-        // changed CustomerController createAppointmentCustomer() to createCustomer()
+        when(customerService.createCustomer(any())).thenReturn(inputCustomer);
         Customer response = customerController.createCustomer(inputCustomer);
 
         assertNotNull(response);
         assertEquals(inputCustomer.getCustomerName(), response.getCustomerName());
         assertEquals(inputCustomer.getCustomerEmail(), response.getCustomerEmail());
-
     }
-    // TEST FOR testUpdateCustomer() is in CustomerControllerInjectMocksTests because it uses injectMocks instead of Mock
-    // each class can use different annotations that make sense for each class/method -s testing requirements.
-
-
 
     @Test
-    public void testDeleteCustomerById(){
+    void testUpdateCustomer(){
+        Long customerId = 1L;
+        Customer customer = new Customer();
+        customer.setCustomerId(customerId);
+        customer.setCustomerName("test1");
+        customer.setCustomerEmail("test1@email.com");
+
+        Customer customer2 = new Customer();
+        customer2.setCustomerId(customerId);
+        customer2.setCustomerName("test2");
+        customer2.setCustomerEmail("test2@email.com");
+
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer2);
+
+        Customer result = customerService.updateCustomer(customer2);
+
+        assertNotNull(result);
+        assertEquals(customer2.getCustomerName(), result.getCustomerName());
+        assertEquals(customer2.getCustomerEmail(), result.getCustomerEmail());
+
+        verify(customerRepository, times(1)).save(any(Customer.class));
+    }
+
+    @Test
+    void testDeleteCustomerById() {
         long testCustomerId = 123;
-        doNothing().when(customerService).deleteCustomerById(testCustomerId);
-        customerController.deleteCustomerById(testCustomerId);
-
-        verify(customerService, times(1)).deleteCustomerById(testCustomerId);
+        doNothing().when(customerRepository).deleteById(testCustomerId);
+        customerService.deleteCustomerById(testCustomerId);
+        verify(customerRepository, times(1)).deleteById(testCustomerId);
     }
 
     @Test
-    public void testDeleteCustomerByIdException(){
-        long testCustomerId = 123450;
+    void testDeleteCustomerByIdException() {
+        long testCustomerId = 111111;
+        String message = "Customer not found";
+        doThrow(new NoSuchElementException(message)).when(customerRepository).deleteById(testCustomerId);
 
-        doThrow(new IllegalArgumentException("Customer not found")).when(customerService).deleteCustomerById(testCustomerId);
-        assertThrows(IllegalArgumentException.class, () -> customerController.deleteCustomerById(testCustomerId));
-        verify(customerService, times(1)).deleteCustomerById(testCustomerId);
+        Exception exception = assertThrows(NoSuchElementException.class, () -> {
+            customerService.deleteCustomerById(testCustomerId);
+        });
+
+        assertEquals(message, exception.getMessage());
+        verify(customerRepository, times(1)).deleteById(testCustomerId);
+
     }
 }
-
-

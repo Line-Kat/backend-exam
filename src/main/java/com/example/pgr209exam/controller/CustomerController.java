@@ -51,9 +51,8 @@ public class CustomerController {
         customerService.deleteCustomerById(id);
     }
 
-
-
-    public Customer addAddressToCustomer(@RequestBody Customer customer, Address address) {
-        return customerService.addAddressToCustomer(customer, address);
+    @PutMapping("/{id}/address")
+    public Customer addAddressToCustomer(@RequestBody Address address, @PathVariable Long id) {
+        return customerService.addAddressToCustomer(id, address);
     }
 }

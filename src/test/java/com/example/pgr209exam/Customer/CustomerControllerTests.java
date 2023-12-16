@@ -1,159 +1,95 @@
 package com.example.pgr209exam.Customer;
 
-import com.example.pgr209exam.controller.CustomerController;
 import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
-import com.example.pgr209exam.model.Subassembly;
-import com.example.pgr209exam.repository.CustomerRepository;
 import com.example.pgr209exam.service.CustomerService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureMockMvc
 public class CustomerControllerTests {
 
-    @Value(value = "${local.server.port}")
-
-    @LocalServerPort
-    private int port;
+    @Autowired
+    private MockMvc mockMvc;
 
     @MockBean
-    private CustomerRepository customerRepository;
+    private CustomerService customerService;
 
-    @Autowired
-    private TestRestTemplate testRestTemplate;
-
-    @org.junit.jupiter.api.Test
-    public void testGetCustomers(){
-        Customer customer = new Customer();
-        customer.setCustomerId(12345L);
-        customer.setCustomerName("testName");
-        customer.setCustomerEmail("testCustomer@email.com");
-        customerRepository.save(customer);
-
-        ResponseEntity<Customer[]> responseEntity = testRestTemplate.getForEntity(
-                "http://localhost:" + port + "/api/customer",
-                Customer[].class
-        );
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Customer[] customers = responseEntity.getBody();
-        assertNotNull(customers);
-    }
-
-    @org.junit.jupiter.api.Test
-    public void testGetCustomerById() {
-        Customer customer = new Customer();
-        customer.setCustomerId(12345L);
-        customer.setCustomerName("testName");
-        customer.setCustomerEmail("testCustomer@email.com");
-        customerRepository.save(customer);
-
-        ResponseEntity<Customer> responseEntity = testRestTemplate.getForEntity(
-                "http://localhost:" + port + "/api/customer/" + customer.getCustomerId(),
-                Customer.class
-        );
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Customer retrievedCustomer = responseEntity.getBody();
-    }
-
-    @org.junit.jupiter.api.Test
-    public void testCreateCustomer() {
-        Customer customer = new Customer();
-        customer.setCustomerId(12345L);
-        customer.setCustomerName("testName");
-        customer.setCustomerEmail("testCustomer@email.com");
-        customerRepository.save(customer);
-
-        ResponseEntity<Customer> responseEntity = testRestTemplate.postForEntity(
-                "http://localhost:" + port + "/api/customer",
-                customer,
-                Customer.class
-        );
-        Customer createdCustomer = responseEntity.getBody();
-    }
-    @org.junit.jupiter.api.Test
-    public void testUpdateCustomer() {
-        Customer customer = new Customer();
-        customer.setCustomerId(12345L);
-        customer.setCustomerName("testName");
-        customer.setCustomerEmail("testCustomer@email.com");
-        when(customerRepository.save(ArgumentMatchers.any(Customer.class))).thenReturn(customer);
-
-        Customer updatedCustomer = new Customer();
-        updatedCustomer.setCustomerId(customer.getCustomerId());
-        updatedCustomer.setCustomerName("testUpdateName");
-        updatedCustomer.setCustomerEmail("testUpdate@email.com");
-
-
-        ResponseEntity<Customer> responseEntity = testRestTemplate.exchange(
-                "http://localhost:" + port + "/api/customer/" + customer.getCustomerId(),
-                HttpMethod.PUT,
-                new HttpEntity<>(updatedCustomer),
-                Customer.class
-        );
-
-        Customer retrievedCustomer = responseEntity.getBody();
-        assertNotNull(retrievedCustomer);
+    @Test
+    public void testGetCustomers() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/customer")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(customerService, times(1)).getCustomers(any());
     }
 
     @Test
-    public void testDeleteCustomer() {
-        Customer customer = new Customer();
-        customer.setCustomerId(12345L);
-        customer.setCustomerName("testName");
-        customer.setCustomerEmail("testCustomer@email.com");
-        customerRepository.save(customer);
-
-        testRestTemplate.delete("http://localhost:" + port + "/api/customer/" + customer.getCustomerId());
-        assertFalse(customerRepository.existsById(customer.getCustomerId()));
+    public void testGetCustomerById() throws Exception {
+        Long customerId = 1L;
+        when(customerService.getCustomerById(customerId)).thenReturn(new Customer());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/customer/{id}", customerId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(customerService, times(1)).getCustomerById(customerId);
     }
 
-    @Autowired
-    private CustomerController customerController;
+    @Test
+    public void testCreateCustomer() throws Exception {
+        Customer customer = new Customer();
+        customer.setCustomerId(1L);
+        when(customerService.createCustomer(any(Customer.class))).thenReturn(customer);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/customer")
+                        .content("{}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(customerService, times(1)).createCustomer(any(Customer.class));
+    }
 
     @Test
-    public void addAddressToCustomer_newAddressIsAddedToCustomer_shouldReturnNewAddress() {
+    public void testUpdateCustomer() throws Exception {
+
         Customer customer = new Customer();
-        customer.setCustomerId(12345L);
-        customer.setCustomerName("Mari");
-        customer.setCustomerEmail("testCustomer@email.com");
-        when(customerRepository.save(ArgumentMatchers.any(Customer.class))).thenReturn(customer);
+        customer.setCustomerId(1L);
+        when(customerService.updateCustomer(any(Customer.class))).thenReturn(customer);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/customer")
+                        .content("{}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(customerService, times(1)).updateCustomer(any(Customer.class));
+    }
 
-        Assertions.assertEquals("Mari", customer.getCustomerName());
+    @Test
+    public void testDeleteCustomerById() throws Exception {
+        long customerId = 1L;
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/customer/{id}", customerId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(customerService, times(1)).deleteCustomerById(customerId);
+    }
 
-        String newAddressName = "Granlia";
-        Address address = new Address(newAddressName);
-        Customer returnedCustomer = customerController.addAddressToCustomer(customer, address);
-
-        int numberOfAddresses = returnedCustomer.getAddresses().size();
-        Assertions.assertEquals(1, numberOfAddresses);
-
-        List<Address> addresses = returnedCustomer.getAddresses();
-        Address newAddress = addresses.get(0);
-
-        Assertions.assertEquals(newAddressName, newAddress.getAddressName());
+    @Test
+    public void addAddressToCustomer_newAddressIsAddedToCustomer_shouldReturnNewAddress() throws Exception {
+        Customer customer = new Customer();
+        customer.setCustomerId(1L);
+        when(customerService.updateCustomer(any(Customer.class))).thenReturn(customer);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/customer/1/address")
+                        .content("{}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(customerService, times(1)).addAddressToCustomer(anyLong(), any(Address.class));
     }
 }
 
