@@ -32,7 +32,5 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public void deleteAddressById(Long id) {
-        addressRepository.deleteById(id);
-    }
+    public void deleteAddressById(Long id) { addressRepository.deleteById(id); }
 }

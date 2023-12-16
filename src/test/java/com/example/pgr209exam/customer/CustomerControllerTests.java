@@ -1,4 +1,4 @@
-package com.example.pgr209exam.Customer;
+package com.example.pgr209exam.customer;
 
 import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
