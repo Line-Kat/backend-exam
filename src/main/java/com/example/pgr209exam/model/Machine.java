@@ -28,7 +28,6 @@ public class Machine {
         this.machineName = machineName;
     }
 
-    //unidirectional
     @OneToMany(cascade = CascadeType.ALL)
     private List<Subassembly> subassemblies = new ArrayList<>();
 }

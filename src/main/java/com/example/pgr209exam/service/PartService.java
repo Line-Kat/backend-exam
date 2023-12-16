@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class PartService {
     private final PartRepository partRepository;
-
     @Autowired
     public PartService(PartRepository partRepository) {
         this.partRepository = partRepository;

@@ -28,7 +28,6 @@ public class Order {
     @JsonIgnoreProperties("orders")
     private Customer customer;
 
-    //unidirectional
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "order_machine",
