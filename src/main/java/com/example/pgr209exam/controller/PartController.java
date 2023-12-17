@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,9 +39,13 @@ public class PartController {
         return partService.createPart(part);
     }
 
-    @PutMapping
-    public Part updatePart(@RequestBody Part part) {
-        return partService.updatePart(part);
+    @PutMapping("/{id}")
+    public ResponseEntity<Part> updatePart(@PathVariable Long id, @RequestBody Part partName) {
+        Part updatedPart = partService.updatePart(id, partName);
+        if (updatedPart == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedPart);
     }
 
     @DeleteMapping("/{id}")

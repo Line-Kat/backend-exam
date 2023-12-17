@@ -1,5 +1,8 @@
 package com.example.pgr209exam.service;
 
+import com.example.pgr209exam.exception.ResourceNotFoundException;
+import com.example.pgr209exam.model.Address;
+import com.example.pgr209exam.model.Machine;
 import com.example.pgr209exam.model.Part;
 import com.example.pgr209exam.repository.PartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,11 @@ public class PartService {
         return partRepository.save(part);
     }
 
-    public Part updatePart(Part part) {
+    public Part updatePart(Long id, Part partName) {
+        Part part = partRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No part with id: " + id));
+
+        part.setPartName(partName.getPartName());
         return partRepository.save(part);
     }
 

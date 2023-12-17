@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
@@ -37,7 +39,7 @@ public class AddressServiceTests{
             Page<Address> result = addressService.getAddresses(pageable);
             verify(addressRepository, times(1)).findAll(pageable);
 
-            Assertions.assertEquals(mockedPage, result);
+            assertEquals(mockedPage, result);
     }
 
     @Test
@@ -47,7 +49,7 @@ public class AddressServiceTests{
 
         Address actualAddress = addressService.getAddressById(1L);
 
-        Assertions.assertEquals(address, actualAddress);
+        assertEquals(address, actualAddress);
     }
 
     @Test
@@ -59,26 +61,31 @@ public class AddressServiceTests{
 
         Address returnedAddress = addressService.createAddress(address);
 
-        Assertions.assertNotNull(returnedAddress);
-        Assertions.assertEquals(addressName, returnedAddress.getAddressName());
+        assertNotNull(returnedAddress);
+        assertEquals(addressName, returnedAddress.getAddressName());
     }
 
     @Test
     public void updateAddress_updateExistingAddress_shouldReturnUpdatedAddress() {
-        String originalAddressName = "Blåklokkestien";
-        String updatedAddressName = "Rådhusgata";
 
-        Address address = new Address(originalAddressName);
-        when(addressRepository.save(address)).thenReturn(address);
-        Address originalAddress = addressService.createAddress(address);
+        Long addressId = 1L;
+        String existingAddressName = "Blåklokkestien";
+        String newAddressName = "Rådhusgata";
 
-        Assertions.assertEquals(originalAddressName, originalAddress.getAddressName());
+        Address existingAddress = new Address();
+        existingAddress.setAddressId(addressId);
+        existingAddress.setAddressName(existingAddressName);
 
-        address.setAddressName(updatedAddressName);
-        when(addressRepository.save(address)).thenReturn(address);
-        Address updatedAddress = addressService.updateAddress(address);
+        when(addressRepository.findById(addressId)).thenReturn(Optional.of(existingAddress));
+        when(addressRepository.save(any(Address.class))).thenAnswer(i -> i.getArgument(0));
 
-        Assertions.assertEquals(updatedAddressName, updatedAddress.getAddressName());
+        Address updatedFieldAddress = new Address();
+        updatedFieldAddress.setAddressName(newAddressName);
+
+        Address updatedAddress = addressService.updateAddress(addressId, updatedFieldAddress);
+
+        assertNotNull(updatedAddress);
+        assertEquals(newAddressName, updatedAddress.getAddressName());
     }
 
     @Test
@@ -89,7 +96,7 @@ public class AddressServiceTests{
         when(addressRepository.save(address)).thenReturn(address);
         Address createdAddress = addressService.createAddress(address);
 
-        Assertions.assertEquals(address, createdAddress);
+        assertEquals(address, createdAddress);
 
         addressService.deleteAddressById(1L);
         Address deletedAddress = addressService.getAddressById(1L);

@@ -1,13 +1,12 @@
 package com.example.pgr209exam.service;
 
+import com.example.pgr209exam.exception.ResourceNotFoundException;
 import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AddressService {
@@ -28,7 +27,12 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public Address updateAddress(Address address) {
+    public Address updateAddress(Long id, Address addressName) {
+
+        Address address = addressRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No address with id: " + id));
+
+        address.setAddressName(addressName.getAddressName());
         return addressRepository.save(address);
     }
 

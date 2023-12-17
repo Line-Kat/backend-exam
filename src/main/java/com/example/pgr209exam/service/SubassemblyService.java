@@ -1,5 +1,7 @@
 package com.example.pgr209exam.service;
 
+import com.example.pgr209exam.exception.ResourceNotFoundException;
+import com.example.pgr209exam.model.Machine;
 import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.repository.SubassemblyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,15 @@ public class SubassemblyService {
     }
 
     public Subassembly updateSubassembly(Subassembly subassembly) {
+        return subassemblyRepository.save(subassembly);
+    }
+
+    public Subassembly updateSubassembly(Long id, Subassembly subassemblyName) {
+
+        Subassembly subassembly = subassemblyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No subassembly with id: " + id));
+
+        subassembly.setSubassemblyName(subassemblyName.getSubassemblyName());
         return subassemblyRepository.save(subassembly);
     }
 

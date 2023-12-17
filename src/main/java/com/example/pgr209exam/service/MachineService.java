@@ -1,5 +1,6 @@
 package com.example.pgr209exam.service;
 
+import com.example.pgr209exam.exception.ResourceNotFoundException;
 import com.example.pgr209exam.model.Machine;
 import com.example.pgr209exam.repository.MachineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,14 @@ public class MachineService {
         return machineRepository.save(machine);
     }
 
-    public Machine updateMachine(Machine machine) {
+    public Machine updateMachine(Long id, Machine machineName) {
+
+        Machine machine = machineRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No machine with id: " + id));
+
+        machine.setMachineName(machineName.getMachineName());
         return machineRepository.save(machine);
     }
-
     public void deleteMachineById(Long id) {
         machineRepository.deleteById(id);
     }
