@@ -51,9 +51,6 @@ public class SubassemblyService {
         subassemblyRepository.deleteById(id);
     }
 
-
-
-
     public Subassembly addPart(Long id, Part part) {
         Subassembly subassembly = getSubassemblyById(id);
         List<Part> parts = subassembly.getParts();
