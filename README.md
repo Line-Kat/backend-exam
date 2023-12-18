@@ -13,6 +13,10 @@ test
 CONTROLLER CLASSES
 Each controller class has methods for get, getAll with pagination, update, create and delete
 
+Wrapper
+CustomerAddressWrapper is used as a DTO to encapsulate "customer" and "address" (objects and list) to create a single object. 
+This allows a client to send the data (customer information + address list) in a single JSON object, simplifying the data handling
+
 
 ADDITIONAL FUNCTIONALITY
 Customer
@@ -35,7 +39,9 @@ Use TestRestTemplate to make a REST call to the server
 Use @MockBean to mock out parts of the code when testing
 Use MockMvc for end-to-end-testing
 
-    
+RuntimeException
+A subclass of RuntimeException (ResourceNotFoundException) was created to return a message when/or if IDs are not found.
+
 SOURCES
 Source for pagination: https://www.javaguides.net/2022/02/spring-data-jpa-pagination-and-sorting.html
 
