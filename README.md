@@ -5,6 +5,7 @@
 * repository (contains repository class for each domain)
 * service (contains service class for each domain)
 
+
 ### test
 * each domain has a folder with a file with tests for controller class and a file with tests for service class 
 * subassembly also has an own file with a test for additional functionality
@@ -13,6 +14,7 @@
 
 ## CONTROLLER CLASSES
 Each controller class has methods for get, getAll with pagination, update, create and delete
+
 
 ## WRAPPER
 CustomerAddressWrapper is used as a DTO to encapsulate "customer" and "address" (objects and list) to create a single object. 
@@ -40,8 +42,10 @@ This allows a client to send the data (customer information + address list) in a
 * @MockBean to mock out parts of the code when testing
 * MockMvc for end-to-end-testing
 
+
 ## RuntimeException
 A subclass of RuntimeException (ResourceNotFoundException) was created to return a message when/or if IDs are not found.
+
 
 ## SOURCES
 [Source for pagination](https://www.javaguides.net/2022/02/spring-data-jpa-pagination-and-sorting.html)
