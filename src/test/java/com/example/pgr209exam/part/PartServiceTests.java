@@ -8,13 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class PartServiceTests {
@@ -24,6 +27,15 @@ public class PartServiceTests {
     @Autowired
     private PartService partService;
 
+    @Test
+    public void testGetParts() {
+        Page<Part> mockedPage = mock(Page.class);
+        when(partRepository.findAll(any(Pageable.class))).thenReturn(mockedPage);
+
+        Page<Part> result = partService.getParts(PageRequest.of(0, 5));
+        verify(partRepository, times(1)).findAll(any(Pageable.class));
+        assertEquals(mockedPage, result);
+    }
     @Test
     public void getPartById_whenExisting_shouldReturnPart() {
         Part part = new Part("Part");

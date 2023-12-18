@@ -9,23 +9,19 @@ import com.example.pgr209exam.service.CustomerService;
 import com.example.pgr209exam.wrapper.CustomerAddressWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 
 @SpringBootTest
@@ -133,7 +129,23 @@ class CustomerServiceTests {
     }
 
     @Test
-    void createCustomerWithAddress(){
+    void testAddAddressToCustomer(){
+        Long customerId = 1L;
+        Customer mockCustomer = new Customer();
+        Address address = new Address();
+
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(mockCustomer));
+        when(customerRepository.save(any(Customer.class))).thenReturn(mockCustomer);
+        Customer updatedCustomer = customerService.addAddressToCustomer(customerId, address);
+
+        assertNotNull(updatedCustomer);
+        assertTrue(updatedCustomer.getAddresses().contains(address));
+        verify(customerRepository, times(1)).save(mockCustomer);
+        verify(customerRepository, times(1)).findById(customerId);
+    }
+
+    @Test
+    void testCreateCustomerWithAddress(){
         Customer customer = new Customer();
         Address address = new Address();
         address.setAddressId(1L);

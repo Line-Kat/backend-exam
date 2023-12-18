@@ -1,7 +1,5 @@
 package com.example.pgr209exam.controller;
 
-import com.example.pgr209exam.model.Customer;
-import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.model.Part;
 import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.service.SubassemblyService;
