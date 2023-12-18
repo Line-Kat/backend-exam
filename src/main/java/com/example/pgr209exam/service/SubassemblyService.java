@@ -1,5 +1,8 @@
 package com.example.pgr209exam.service;
 
+import com.example.pgr209exam.model.Customer;
+import com.example.pgr209exam.model.Order;
+import com.example.pgr209exam.model.Part;
 import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.repository.SubassemblyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +37,18 @@ public class SubassemblyService {
     public void deleteSubassemblyById(Long id) {
         subassemblyRepository.deleteById(id);
     }
+
+
+
+
+    public Subassembly addPart(Long id, Part part) {
+        Subassembly subassembly = getSubassemblyById(id);
+        List<Part> parts = subassembly.getParts();
+        parts.add(part);
+        subassembly.setParts(parts);
+
+        return subassemblyRepository.save(subassembly);
+    }
+
+
 }
