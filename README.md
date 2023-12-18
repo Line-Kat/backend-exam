@@ -6,7 +6,7 @@ main
     service (contains service class for each domain)
 test
     each domain has a folder with a file with tests for controller class and a file with tests for service class 
-    subassembly also has an own file with tests for additional functionality
+    subassembly also has an own file with a test for additional functionality
     under resources is a folder with sql scripts used in the controller tests
 
 
@@ -22,6 +22,9 @@ Customer
 Subassembly
     addPart() - adds new part to a subassembly
     deletePart() - deletes a part from a subassembly
+Machine
+    addSubassembly - adds new subassembly to a machine
+    deleteSubassembly - deletes a subassembly from a machine
 
 
 TESTS

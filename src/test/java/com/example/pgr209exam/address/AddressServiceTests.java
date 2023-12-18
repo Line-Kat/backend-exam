@@ -22,7 +22,6 @@ import static org.mockito.Mockito.times;
 
 @SpringBootTest
 public class AddressServiceTests{
-
     @MockBean
     private AddressRepository addressRepository;
 
@@ -31,10 +30,8 @@ public class AddressServiceTests{
 
     @Test
     public void getAddresses_whenExisting_shouldReturnPage() {
-
             Page<Address> mockedPage = mock(Page.class);
             when(addressRepository.findAll(any(Pageable.class))).thenReturn(mockedPage);
-
             Pageable pageable = PageRequest.of(0, 10);
             Page<Address> result = addressService.getAddresses(pageable);
             verify(addressRepository, times(1)).findAll(pageable);
@@ -46,7 +43,6 @@ public class AddressServiceTests{
     public void getAddressById_whenExisting_shouldReturnAddress() {
         Address address = new Address("Dronninggata");
         when(addressRepository.findById(1L)).thenReturn(Optional.of(address));
-
         Address actualAddress = addressService.getAddressById(1L);
 
         assertEquals(address, actualAddress);
@@ -55,19 +51,16 @@ public class AddressServiceTests{
     @Test
     public void createAddress_addingNewAddress_shouldReturnAddress() {
         String addressName = "Prinsessealleen";
-
         Address address = new Address(addressName);
         when(addressRepository.save(address)).thenReturn(address);
-
         Address returnedAddress = addressService.createAddress(address);
 
         assertNotNull(returnedAddress);
-        assertEquals(addressName, returnedAddress.getAddressName());
+        assertEquals(address, returnedAddress);
     }
 
     @Test
     public void updateAddress_updateExistingAddress_shouldReturnUpdatedAddress() {
-
         Long addressId = 1L;
         String existingAddressName = "Blåklokkestien";
         String newAddressName = "Rådhusgata";
@@ -91,7 +84,6 @@ public class AddressServiceTests{
     @Test
     public void deleteAddress_deleteExistingAddress_shouldReturnZero() {
         String addressName = "Svingen";
-
         Address address = new Address(addressName);
         when(addressRepository.save(address)).thenReturn(address);
         Address createdAddress = addressService.createAddress(address);

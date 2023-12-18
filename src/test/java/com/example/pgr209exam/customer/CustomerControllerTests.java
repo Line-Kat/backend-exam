@@ -29,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
 public class CustomerControllerTests {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -70,7 +69,6 @@ public class CustomerControllerTests {
 
     @Test
     public void testUpdateCustomer() throws Exception {
-
         Customer customer = new Customer();
         customer.setCustomerId(1L);
         when(customerService.updateCustomer(any(Customer.class))).thenReturn(customer);
@@ -91,7 +89,7 @@ public class CustomerControllerTests {
     }
 
     @Test
-    public void addAddressToCustomer_newAddressIsAddedToCustomer_shouldReturnNewAddress() throws Exception {
+    public void addAddressToCustomer_newAddressIsAddedToCustomer() throws Exception {
         Customer customer = new Customer();
         customer.setCustomerId(1L);
         when(customerService.updateCustomer(any(Customer.class))).thenReturn(customer);
@@ -104,7 +102,6 @@ public class CustomerControllerTests {
 
     @Test
     public void addOrder_newOrderIsAddedToCustomer() throws Exception {
-
         Customer customer = new Customer();
         customer.setCustomerId(1L);
         when(customerService.updateCustomer(any(Customer.class))).thenReturn(customer);

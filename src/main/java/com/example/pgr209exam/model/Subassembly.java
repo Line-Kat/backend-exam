@@ -23,7 +23,6 @@ public class Subassembly {
 
     @Column(name = "subassembly_name")
     private String subassemblyName;
-
     public Subassembly(String subassemblyName) {
         this.subassemblyName = subassemblyName;
     }

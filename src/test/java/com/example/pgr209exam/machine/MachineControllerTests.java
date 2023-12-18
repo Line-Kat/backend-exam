@@ -58,7 +58,6 @@ public class MachineControllerTests {
     @Test
     public void createMachine_whenExisting_shouldReturnMachine() {
         String machineName = "hair dryer";
-
         Machine machine = testRestTemplate.postForObject("http://localhost:" + port + "/api/machine", new Machine(machineName), Machine.class);
 
         Assertions.assertNotNull(machine);
@@ -94,6 +93,7 @@ public class MachineControllerTests {
     @Sql("/sql/machine.sql")
     public void addSubassembly_newSubassemblyIsAddedToMachine() {
         Machine machine = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine/1", Machine.class);
+
         Assertions.assertEquals(0, machine.getSubassemblies().size());
 
         Subassembly newSubassembly = new Subassembly("subassemblyName");

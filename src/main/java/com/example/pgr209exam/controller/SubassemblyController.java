@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/subassembly")
 public class SubassemblyController {
     private final SubassemblyService subassemblyService;
-
     @Autowired
     public SubassemblyController(SubassemblyService subassemblyService) {
         this.subassemblyService = subassemblyService;

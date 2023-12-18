@@ -49,7 +49,6 @@ public class AddressControllerTests {
     @Test
     public void createAddress_whenExisting_shouldReturnAddress() {
         String addressName = "Storgata";
-
         Address address = testRestTemplate.postForObject("http://localhost:" + port + "/api/address", new Address(addressName), Address.class);
 
         Assertions.assertNotNull(address);
@@ -61,15 +60,14 @@ public class AddressControllerTests {
     public void updateAddress_whenUpdated_shouldReturnUpdatedAddress() {
         String originalAddressName = "Solsikkeengen";
         String updatedAddressName = "Blomsterbakken";
-
         Address address = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
+
         Assertions.assertEquals(originalAddressName, address.getAddressName());
 
         address.setAddressName(updatedAddressName);
         testRestTemplate.put("http://localhost:" + port + "/api/address/1", address);
 
-        Address updatedAddress = testRestTemplate.getForObject("http://localhost:" + port + "/api/address/1", Address.class);
-        Assertions.assertEquals(updatedAddressName, updatedAddress.getAddressName());
+        Assertions.assertEquals(updatedAddressName, address.getAddressName());
     }
 
     @Test

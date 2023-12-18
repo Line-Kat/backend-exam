@@ -34,15 +34,9 @@ public class SubassemblyService {
         return subassemblyRepository.save(subassembly);
     }
 
-    public Subassembly updateSubassembly(Subassembly subassembly) {
-        return subassemblyRepository.save(subassembly);
-    }
-
     public Subassembly updateSubassembly(Long id, Subassembly subassemblyName) {
-
         Subassembly subassembly = subassemblyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No subassembly with id: " + id));
-
         subassembly.setSubassemblyName(subassemblyName.getSubassemblyName());
         return subassemblyRepository.save(subassembly);
     }
@@ -65,9 +59,6 @@ public class SubassemblyService {
         List<Part> parts = subassembly.getParts();
         parts.remove(part);
         subassembly.setParts(parts);
-
         subassemblyRepository.save(subassembly);
     }
-
-
 }

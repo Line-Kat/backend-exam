@@ -48,7 +48,6 @@ public class PartServiceTests {
     @Test
     public void createPart_addingNewPart_shouldReturnPart() {
         String partName = "Part";
-
         Part part = new Part(partName);
         when(partRepository.save(part)).thenReturn(part);
         Part returnedPart = partService.createPart(part);
@@ -82,7 +81,6 @@ public class PartServiceTests {
     @Test
     public void deletePart_deleteExistingPart_shouldNotFail() {
         String partName = "Part";
-
         Part part = new Part(partName);
         when(partRepository.save(part)).thenReturn(part);
         Part createdPart = partService.createPart(part);

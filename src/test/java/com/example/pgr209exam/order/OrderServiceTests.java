@@ -24,7 +24,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @SpringBootApplication(scanBasePackages = "com.example.pgr209exam")
 public class OrderServiceTests {
-
     @MockBean
     private OrderRepository orderRepository;
 
@@ -38,18 +37,18 @@ public class OrderServiceTests {
 
         Pageable pageable = PageRequest.of(0, 10);
         Page<Order> result = orderService.getOrders(pageable);
+
         verify(orderRepository, times(1)).findAll(pageable);
         assertEquals(mockedPage, result);
     }
 
     @Test
     public void testGetOrderById(){
-
         when(orderRepository.findById(1L)).thenReturn(java.util.Optional.of(new Order()));
         Order result = orderService.getOrderById(1L);
+
         verify(orderRepository, times(1)).findById(1L);
         assertEquals(Order.class, result.getClass());
-
     }
 
     @Test
@@ -58,13 +57,13 @@ public class OrderServiceTests {
         orderTest.setOrderId(1L);
         when(orderRepository.save(orderTest)).thenReturn(orderTest);
         Order createdOrder = orderService.createOrder(orderTest);
+
         verify(orderRepository, times(1)).save(orderTest);
         assertEquals(orderTest, createdOrder);
     }
 
     @Test
     public void testUpdateOrder(){
-
         Customer customer1 = new Customer();
         customer1.setCustomerId(1L);
         customer1.setCustomerName("testOld customer");
@@ -82,17 +81,17 @@ public class OrderServiceTests {
 
         when(orderRepository.save(testUpdateOrder)).thenReturn(testUpdateOrder);
         Order result = orderService.updateOrder(testUpdateOrder);
+
         verify(orderRepository, times(1)).save(testUpdateOrder);
         assertEquals(testUpdateOrder, result);
     }
     @Test
     public void testDeleteOrderById(){
-
         Order existingOrder = new Order();
         existingOrder.setOrderId(1L);
         when(orderRepository.findById(existingOrder.getOrderId())).thenReturn(Optional.of(existingOrder));
         orderService.deleteOrderById(existingOrder.getOrderId());
-        verify(orderRepository, times(1)).deleteById(existingOrder.getOrderId());
 
+        verify(orderRepository, times(1)).deleteById(existingOrder.getOrderId());
     }
 }
