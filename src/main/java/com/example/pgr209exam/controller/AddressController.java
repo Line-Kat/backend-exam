@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,9 +38,13 @@ public class AddressController {
         return addressService.createAddress(address);
     }
 
-    @PutMapping
-    public Address updateAddress(@RequestBody Address address) {
-        return addressService.updateAddress(address);
+    @PutMapping("/{id}")
+    public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody Address address) {
+        Address updatedAddress = addressService.updateAddress(id, address);
+        if (updatedAddress == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedAddress);
     }
 
     @DeleteMapping("/{id}")

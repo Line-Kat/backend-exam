@@ -11,6 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -46,20 +49,24 @@ public class MachineServiceTests {
 
     @Test
     public void updateMachine_updateExistingMachine_shouldReturnUpdatedMachine() {
-        String originalName = "Sewing machine";
-        String updatedName = "Blender";
-        
-        Machine machine = new Machine(originalName);
-        when(machineRepository.save(machine)).thenReturn(machine);
-        Machine originalMachine = machineService.createMachine(machine);
+        Long machineId = 1L;
+        String existingMachineName = "Sewing machine";
+        String newMachineName = "Blender";
 
-        Assertions.assertEquals(originalName, originalMachine.getMachineName());
+        Machine existingMachine = new Machine();
+        existingMachine.setMachineId(machineId);
+        existingMachine.setMachineName(existingMachineName);
 
-        originalMachine.setMachineName(updatedName);
-        when(machineRepository.save(originalMachine)).thenReturn(originalMachine);
-        Machine updatedMachine = machineService.updateMachine(originalMachine);
+        when(machineRepository.findById(machineId)).thenReturn(Optional.of(existingMachine));
+        when(machineRepository.save(any(Machine.class))).thenAnswer(i -> i.getArgument(0));
 
-        Assertions.assertEquals(updatedName, updatedMachine.getMachineName());
+        Machine updatedFieldName = new Machine();
+        updatedFieldName.setMachineName(newMachineName);
+
+        Machine updatedMachine = machineService.updateMachine(machineId, updatedFieldName);
+
+        assertNotNull(updatedMachine);
+        assertEquals(newMachineName, updatedMachine.getMachineName());
     }
 
     @Test

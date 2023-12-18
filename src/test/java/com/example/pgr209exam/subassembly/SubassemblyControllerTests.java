@@ -32,6 +32,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureMockMvc
 public class SubassemblyControllerTests {
 
     @Value(value = "${local.server.port}")
@@ -80,13 +81,21 @@ public class SubassemblyControllerTests {
         Assertions.assertEquals(subassemblyName, subassembly.getSubassemblyName());
     }
 
-    /*
     @Test
     @Sql("/sql/subassembly.sql")
     public void updateSubassembly_whenUpdated_shouldReturnUpdatedSubassembly() {
-    }
+        String originalSubassemblyName = "subassembly 1";
+        String updatedSubassemblyName = "subassembly 2";
 
-     */
+        Subassembly subassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
+        Assertions.assertEquals(originalSubassemblyName, subassembly.getSubassemblyName());
+
+        subassembly.setSubassemblyName(updatedSubassemblyName);
+        testRestTemplate.put("http://localhost:" + port + "/api/subassembly/1", subassembly);
+
+        Subassembly updatedSubassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
+        Assertions.assertEquals(updatedSubassemblyName, updatedSubassembly.getSubassemblyName());
+    }
 
     @Test
     @Sql("/sql/subassembly.sql")
@@ -100,35 +109,4 @@ public class SubassemblyControllerTests {
 
         Assertions.assertNull(subassemblyAfterDeleting);
     }
-/*
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private SubassemblyService subassemblyService;
-
-    @Test
-    public void addPart_newPartIsAddedToSubassembly() throws Exception {
-        Subassembly subassembly = new Subassembly();
-        subassembly.setSubassemblyId(1L);
-        when(subassemblyService.addPart(anyLong(), any(Part.class))).thenReturn(subassembly);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/subassembly/1/part")
-                        .content("{}")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-        verify(subassemblyService, times(1)).addPart(anyLong(), any(Part.class));
-    }
-    @Test
-    public void deletePart_PartIsDeletedFromSubassembly() throws Exception {
-        Subassembly subassembly = new Subassembly();
-        List<Part> parts = subassembly.getParts();
-        Part deletePart = new Part();
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/subassembly/1/part", parts.remove(deletePart))
-                        .content("{}")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-        verify(subassemblyService, times(1)).deletePart(anyLong(), any(Part.class));
-    }
-
- */
 }

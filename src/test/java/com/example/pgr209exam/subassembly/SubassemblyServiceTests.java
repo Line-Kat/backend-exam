@@ -11,6 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -43,20 +46,25 @@ public class SubassemblyServiceTests {
 
     @Test
     public void updateSubassembly_updateExistingSubassembly_shouldReturnUpdatedSubassembly() {
-        String originalName = "Subassembly 1";
-        String updatedName = "Subassembly 2";
+        Long subassemblyId = 1L;
+        String existingSubassemblyName = "Subassembly 1";
+        String newSubassemblyName = "Subassembly 2";
 
-        Subassembly subassembly = new Subassembly(originalName);
-        when(subassemblyRepository.save(subassembly)).thenReturn(subassembly);
-        Subassembly originalSubassembly = subassemblyService.createSubassembly(subassembly);
+        Subassembly existingSubassembly = new Subassembly();
+        existingSubassembly.setSubassemblyId(subassemblyId);
+        existingSubassembly.setSubassemblyName(existingSubassemblyName);
 
-        Assertions.assertEquals(originalName, originalSubassembly.getSubassemblyName());
+        when(subassemblyRepository.findById(subassemblyId)).thenReturn(Optional.of(existingSubassembly));
+        when(subassemblyRepository.save(any(Subassembly.class))).thenAnswer(i -> i.getArgument(0));
 
-        originalSubassembly.setSubassemblyName(updatedName);
-        when(subassemblyRepository.save(originalSubassembly)).thenReturn(originalSubassembly);
-        Subassembly updatedSubassembly = subassemblyService.updateSubassembly(originalSubassembly);
+        Subassembly updatedFieldName = new Subassembly();
+        updatedFieldName.setSubassemblyName(newSubassemblyName);
 
-        Assertions.assertEquals(updatedName, updatedSubassembly.getSubassemblyName());
+        Subassembly updatedSubassembly = subassemblyService.updateSubassembly(subassemblyId, updatedFieldName);
+
+        assertNotNull(updatedSubassembly);
+        assertEquals(newSubassemblyName, updatedSubassembly.getSubassemblyName());
+
     }
 
     @Test

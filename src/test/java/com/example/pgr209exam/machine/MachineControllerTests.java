@@ -3,7 +3,6 @@ package com.example.pgr209exam.machine;
 import com.example.pgr209exam.model.Machine;
 import com.example.pgr209exam.repository.MachineRepository;
 import com.jayway.jsonpath.JsonPath;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -68,16 +65,18 @@ public class MachineControllerTests {
     @Test
     @Sql("/sql/machine.sql")
     public void updateMachine_whenUpdated_shouldReturnUpdatedMachine() {
-        /*Machine machine = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine/1", Machine.class);
-        Assertions.assertEquals("sewing machine", machine.getMachineName());
-
+        String originalMachineName = "sewing machine";
         String updatedMachineName = "Mix master";
+
+        Machine machine = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine/1", Machine.class);
+        Assertions.assertEquals(originalMachineName, machine.getMachineName());
 
         machine.setMachineName(updatedMachineName);
         testRestTemplate.put("http://localhost:" + port + "/api/machine/1", machine);
-        Assertions.assertEquals(updatedMachineName, machine.getMachineName());
 
-         */
+        Machine updatedMachine = testRestTemplate.getForObject("http://localhost:" + port + "/api/machine/1", Machine.class);
+        Assertions.assertEquals(updatedMachineName, updatedMachine.getMachineName());
+
     }
 
     @Test

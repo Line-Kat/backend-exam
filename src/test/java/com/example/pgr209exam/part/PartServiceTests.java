@@ -11,6 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -27,7 +30,7 @@ public class PartServiceTests {
         when(partRepository.findById(1L)).thenReturn(Optional.of(part));
         Part actualPart = partService.getPartById(1L);
 
-        Assertions.assertEquals(part, actualPart);
+        assertEquals(part, actualPart);
     }
 
     @Test
@@ -38,26 +41,30 @@ public class PartServiceTests {
         when(partRepository.save(part)).thenReturn(part);
         Part returnedPart = partService.createPart(part);
 
-        Assertions.assertNotNull(returnedPart);
-        Assertions.assertEquals(part, returnedPart);
+        assertNotNull(returnedPart);
+        assertEquals(part, returnedPart);
     }
 
     @Test
     public void updatePart_updateExistingPart_shouldReturnUpdatedPart() {
-        String originalName = "Part 1";
-        String updatedName = "Part 2";
+        Long partId = 1L;
+        String existingPartName = "Part 1";
+        String newPartName = "Part 2";
 
-        Part part = new Part(originalName);
-        when(partRepository.save(part)).thenReturn(part);
-        Part originalPart = partService.createPart(part);
+        Part existingPart = new Part();
+        existingPart.setPartId(partId);
+        existingPart.setPartName(existingPartName);
 
-        Assertions.assertEquals(originalName, originalPart.getPartName());
+        when(partRepository.findById(partId)).thenReturn(Optional.of(existingPart));
+        when(partRepository.save(any(Part.class))).thenAnswer(i -> i.getArgument(0));
 
-        originalPart.setPartName(updatedName);
-        when(partRepository.save(originalPart)).thenReturn(originalPart);
-        Part updatedPart = partService.updatePart(originalPart);
+        Part updatedFieldName = new Part();
+        updatedFieldName.setPartName(newPartName);
 
-        Assertions.assertEquals(updatedName, updatedPart.getPartName());
+        Part updatedPart = partService.updatePart(partId, updatedFieldName);
+
+        assertNotNull(updatedPart);
+        assertEquals(newPartName, updatedPart.getPartName());
     }
 
     @Test
@@ -68,7 +75,7 @@ public class PartServiceTests {
         when(partRepository.save(part)).thenReturn(part);
         Part createdPart = partService.createPart(part);
 
-        Assertions.assertEquals(part, createdPart);
+        assertEquals(part, createdPart);
 
         partService.deletePartById(1L);
         Part deletedPart = partService.getPartById(1L);
