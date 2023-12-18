@@ -40,6 +40,14 @@ public class Customer {
     )
     private List<Address> addresses = new ArrayList<>();
 
+    public void addAddress(Address address){
+        this.addresses.add(address);
+        if (address.getCustomers() == null) {
+            address.setCustomers(new ArrayList<>());
+        }
+        address.getCustomers().add(this);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

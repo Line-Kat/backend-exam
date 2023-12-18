@@ -1,18 +1,25 @@
 package com.example.pgr209exam.customer;
 
 import com.example.pgr209exam.controller.CustomerController;
+import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
+import com.example.pgr209exam.repository.AddressRepository;
 import com.example.pgr209exam.repository.CustomerRepository;
 import com.example.pgr209exam.service.CustomerService;
+import com.example.pgr209exam.wrapper.CustomerAddressWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,6 +33,9 @@ class CustomerServiceTests {
 
     @Mock
     private CustomerRepository customerRepository;
+
+    @Mock
+    private AddressRepository addressRepository;
 
     @InjectMocks
     private CustomerService customerService;
@@ -120,5 +130,22 @@ class CustomerServiceTests {
         assertEquals(message, exception.getMessage());
         verify(customerRepository, times(1)).deleteById(testCustomerId);
 
+    }
+
+    @Test
+    void createCustomerWithAddress(){
+        Customer customer = new Customer();
+        Address address = new Address();
+        address.setAddressId(1L);
+        CustomerAddressWrapper wrapper = new CustomerAddressWrapper(customer, Arrays.asList(address));
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+        when(addressRepository.findById(anyLong())).thenReturn(java.util.Optional.of(address));
+
+        Customer result = customerService.createCustomerWithAddress(wrapper);
+
+        assertNotNull(result);
+        verify(customerRepository, times(1)).save(any(Customer.class));
+        verify(addressRepository, times(1)).findById(anyLong());
     }
 }
