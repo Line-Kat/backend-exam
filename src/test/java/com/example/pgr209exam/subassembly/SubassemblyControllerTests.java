@@ -68,7 +68,7 @@ public class SubassemblyControllerTests {
     public void getSubassemblyById_whenExisting_shouldReturnSubassembly() {
         Subassembly subassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
 
-        Assertions.assertEquals("subassemblyName", subassembly.getSubassemblyName());
+        Assertions.assertEquals("subassembly 1", subassembly.getSubassemblyName());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class SubassemblyControllerTests {
     public void deleteSubassemblyById_whenDeleted_shouldNotFail() {
         Subassembly subassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
 
-        Assertions.assertEquals("subassemblyName", subassembly.getSubassemblyName());
+        Assertions.assertEquals("subassembly 1", subassembly.getSubassemblyName());
 
         testRestTemplate.delete("http://localhost:" + port + "/api/subassembly/1");
         Subassembly subassemblyAfterDeleting = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
