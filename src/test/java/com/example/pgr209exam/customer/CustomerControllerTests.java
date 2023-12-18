@@ -1,9 +1,8 @@
 package com.example.pgr209exam.customer;
 
-import com.example.pgr209exam.controller.CustomerController;
+
 import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
-import com.example.pgr209exam.model.Machine;
 import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.service.CustomerService;
 import com.example.pgr209exam.wrapper.CustomerAddressWrapper;
@@ -17,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
@@ -118,7 +116,7 @@ public class CustomerControllerTests {
     }
 
     @Test
-    public void createCustomerWithAddress() throws Exception {
+    public void testCreateCustomerWithAddress() throws Exception {
         Long CustomerId = 1L;
         Customer customer = new Customer();
         customer.setCustomerId(CustomerId);
@@ -133,7 +131,7 @@ public class CustomerControllerTests {
 
         given(customerService.createCustomerWithAddress(any(CustomerAddressWrapper.class))).willReturn(customer);
 
-        mockMvc.perform(post("/api/customer/createWithAddress") // Corrected URL
+        mockMvc.perform(post("/api/customer/createWithAddress")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(wrapper)))
                 .andExpect(status().isOk());
