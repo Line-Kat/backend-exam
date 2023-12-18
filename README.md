@@ -14,8 +14,12 @@ Each controller class has methods for get, getAll with pagination, update, creat
 
 ADDITIONAL FUNCTIONALITY
 Customer
-    addAddressToCustomer()
-    createCustomerWithAddress()
+    addAddressToCustomer() - adds new address to a customer
+    createCustomerWithAddress() - creates a new customer with address
+    addOrder() - adds new order to a customer
+Subassembly
+    addPart() - adds new part to a subassembly
+    deletePart() - deletes a part from a subassembly
 
 TESTS
 Use @SpringBootTest in all test classes
@@ -31,6 +35,3 @@ Source for pagination: https://www.javaguides.net/2022/02/spring-data-jpa-pagina
 
 Source for the method clearDatabase in MachineControllerTests, PartControllerTests and SubassemblyControllerTests: 
 https://maciejwalkowiak.com/blog/spring-boot-flyway-clear-database-integration-tests/
-
-For testing controller classes for address, machine, part and subassembly, we use a sql-script (found under resources).
-By using TestRestTemplate we test both integration and end-to-end.
