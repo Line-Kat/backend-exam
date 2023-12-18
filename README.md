@@ -17,6 +17,9 @@ Customer
     addAddressToCustomer() - adds new address to a customer
     createCustomerWithAddress() - creates a new customer with address
     addOrder() - adds new order to a customer
+Subassembly
+    addPart() - adds new part to a subassembly
+    deletePart() - deletes a part from a subassembly
 
 TESTS
 Use @SpringBootTest in all test classes
