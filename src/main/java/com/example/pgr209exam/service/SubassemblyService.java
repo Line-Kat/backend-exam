@@ -50,5 +50,14 @@ public class SubassemblyService {
         return subassemblyRepository.save(subassembly);
     }
 
+    public void deletePart(Long id, Part part) {
+        Subassembly subassembly = getSubassemblyById(id);
+        List<Part> parts = subassembly.getParts();
+        parts.remove(part);
+        subassembly.setParts(parts);
+
+        subassemblyRepository.save(subassembly);
+    }
+
 
 }
