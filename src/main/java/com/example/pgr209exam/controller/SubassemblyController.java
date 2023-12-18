@@ -1,5 +1,8 @@
 package com.example.pgr209exam.controller;
 
+import com.example.pgr209exam.model.Customer;
+import com.example.pgr209exam.model.Order;
+import com.example.pgr209exam.model.Part;
 import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.service.SubassemblyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +49,12 @@ public class SubassemblyController {
     @DeleteMapping("/{id}")
     public void deleteSubassemblyById(@PathVariable Long id) {
         subassemblyService.deleteSubassemblyById(id);
+    }
+
+
+
+    @PutMapping("/{id}/part")
+    public Subassembly addPart(@RequestBody Part part, @PathVariable Long id) {
+        return subassemblyService.addPart(id, part);
     }
 }
