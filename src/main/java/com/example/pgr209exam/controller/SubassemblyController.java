@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,9 +42,13 @@ public class SubassemblyController {
         return subassemblyService.createSubassembly(subassembly);
     }
 
-    @PutMapping
-    public Subassembly updateSubassembly(@RequestBody Subassembly subassembly) {
-        return subassemblyService.updateSubassembly(subassembly);
+    @PutMapping("/{id}")
+    public ResponseEntity<Subassembly> updateSubassembly(@PathVariable Long id, @RequestBody Subassembly subassemblyName) {
+        Subassembly updatedSubassembly = subassemblyService.updateSubassembly(id, subassemblyName);
+        if (updatedSubassembly == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedSubassembly);
     }
 
     @DeleteMapping("/{id}")

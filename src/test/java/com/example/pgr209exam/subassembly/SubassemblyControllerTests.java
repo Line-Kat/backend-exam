@@ -52,7 +52,7 @@ public class SubassemblyControllerTests {
     public void getSubassemblyById_whenExisting_shouldReturnSubassembly() {
         Subassembly subassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
 
-        Assertions.assertEquals("subassemblyName", subassembly.getSubassemblyName());
+        Assertions.assertEquals("subassembly 1", subassembly.getSubassemblyName());
     }
 
     @Test
@@ -68,17 +68,17 @@ public class SubassemblyControllerTests {
     @Test
     @Sql("/sql/subassembly.sql")
     public void updateSubassembly_whenUpdated_shouldReturnUpdatedSubassembly() {
-        /*
+        String originalSubassemblyName = "subassembly 1";
+        String updatedSubassemblyName = "subassembly 2";
+
         Subassembly subassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
-        Assertions.assertEquals("subassemblyName", subassembly.getSubassemblyName());
+        Assertions.assertEquals(originalSubassemblyName, subassembly.getSubassemblyName());
 
-        subassembly.setSubassemblyName("newName");
+        subassembly.setSubassemblyName(updatedSubassemblyName);
         testRestTemplate.put("http://localhost:" + port + "/api/subassembly/1", subassembly);
+
         Subassembly updatedSubassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
-
-        Assertions.assertEquals("newName", updatedSubassembly.getSubassemblyName());
-
-         */
+        Assertions.assertEquals(updatedSubassemblyName, updatedSubassembly.getSubassemblyName());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class SubassemblyControllerTests {
     public void deleteSubassemblyById_whenDeleted_shouldNotFail() {
         Subassembly subassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
 
-        Assertions.assertEquals("subassemblyName", subassembly.getSubassemblyName());
+        Assertions.assertEquals("subassembly 1", subassembly.getSubassemblyName());
 
         testRestTemplate.delete("http://localhost:" + port + "/api/subassembly/1");
         Subassembly subassemblyAfterDeleting = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);

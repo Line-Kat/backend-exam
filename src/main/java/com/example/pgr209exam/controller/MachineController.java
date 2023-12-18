@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,9 +39,13 @@ public class MachineController {
         return machineService.createMachine(machine);
     }
 
-    @PutMapping
-    public Machine updateMachine(@RequestBody Machine machine) {
-        return machineService.updateMachine(machine);
+    @PutMapping("/{id}")
+    public ResponseEntity<Machine> updateMachine(@PathVariable Long id, @RequestBody Machine machineName) {
+        Machine updatedMachine = machineService.updateMachine(id, machineName);
+        if (updatedMachine == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedMachine);
     }
 
     @DeleteMapping("/{id}")
