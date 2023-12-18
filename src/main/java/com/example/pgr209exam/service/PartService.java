@@ -31,7 +31,6 @@ public class PartService {
     public Part updatePart(Long id, Part partName) {
         Part part = partRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No part with id: " + id));
-
         part.setPartName(partName.getPartName());
         return partRepository.save(part);
     }

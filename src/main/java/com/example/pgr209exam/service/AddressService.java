@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class AddressService {
     private final AddressRepository addressRepository;
-
     @Autowired
     public AddressService(AddressRepository addressRepository) {
         this.addressRepository = addressRepository;
@@ -28,10 +27,8 @@ public class AddressService {
     }
 
     public Address updateAddress(Long id, Address addressName) {
-
         Address address = addressRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No address with id: " + id));
-
         address.setAddressName(addressName.getAddressName());
         return addressRepository.save(address);
     }

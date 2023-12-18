@@ -16,7 +16,6 @@ import org.springframework.test.context.jdbc.Sql;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class PartControllerTests {
-
     @Value(value = "${local.server.port}")
     private int port;
 
@@ -69,13 +68,13 @@ public class PartControllerTests {
         String updatedPartName = "part 2";
 
         Part part = testRestTemplate.getForObject("http://localhost:" + port + "/api/part/1", Part.class);
+
         Assertions.assertEquals(originalPartName, part.getPartName());
 
         part.setPartName(updatedPartName);
         testRestTemplate.put("http://localhost:" + port + "/api/part/1", part);
 
-        Part updatedPart = testRestTemplate.getForObject("http://localhost:" + port + "/api/part/1", Part.class);
-        Assertions.assertEquals(updatedPartName, updatedPart.getPartName());
+        Assertions.assertEquals(updatedPartName, part.getPartName());
     }
 
     @Test

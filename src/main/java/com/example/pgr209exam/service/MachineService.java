@@ -15,7 +15,6 @@ import java.util.List;
 @Service
 public class MachineService {
     private final MachineRepository machineRepository;
-
     @Autowired
     public MachineService(MachineRepository machineRepository) {
         this.machineRepository = machineRepository;
@@ -32,10 +31,8 @@ public class MachineService {
     }
 
     public Machine updateMachine(Long id, Machine machineName) {
-
         Machine machine = machineRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No machine with id: " + id));
-
         machine.setMachineName(machineName.getMachineName());
         return machineRepository.save(machine);
     }
@@ -55,7 +52,6 @@ public class MachineService {
     public Machine deleteSubassembly(Long id, Subassembly subassembly) {
         Machine machine = machineRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No machine with id: " + id));
-
         List<Subassembly> subassemblies = machine.getSubassemblies();
         subassemblies.remove(subassembly);
         machine.setSubassemblies(subassemblies);

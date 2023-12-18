@@ -27,7 +27,6 @@ public class SubassemblyServiceTests {
     @Autowired
     private SubassemblyService subassemblyService;
 
-
     @Test
     public void testGetSubassemblies() {
         Page<Subassembly> mockedPage = mock(Page.class);
@@ -54,7 +53,7 @@ public class SubassemblyServiceTests {
         Subassembly returnedSubassembly = subassemblyService.createSubassembly(subassembly);
 
         Assertions.assertNotNull(returnedSubassembly);
-        Assertions.assertEquals(subassemblyName, returnedSubassembly.getSubassemblyName());
+        Assertions.assertEquals(subassembly, returnedSubassembly);
     }
 
     @Test
@@ -77,7 +76,6 @@ public class SubassemblyServiceTests {
 
         assertNotNull(updatedSubassembly);
         assertEquals(newSubassemblyName, updatedSubassembly.getSubassemblyName());
-
     }
 
     @Test

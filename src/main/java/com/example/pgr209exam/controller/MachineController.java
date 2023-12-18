@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/machine")
 public class MachineController {
     private final MachineService machineService;
-
     @Autowired
     public MachineController(MachineService machineService) {
         this.machineService = machineService;
@@ -54,8 +53,6 @@ public class MachineController {
     public void deleteMachineById(@PathVariable Long id) {
         machineService.deleteMachineById(id);
     }
-
-
 
     @PutMapping("/{id}/add-subassembly")
     public ResponseEntity<Machine> addSubassembly(@PathVariable Long id, @RequestBody Subassembly subassembly) {

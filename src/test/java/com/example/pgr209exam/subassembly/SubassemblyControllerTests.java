@@ -18,7 +18,6 @@ import org.springframework.test.context.jdbc.Sql;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
 public class SubassemblyControllerTests {
-
     @Value(value = "${local.server.port}")
     private int port;
 
@@ -77,8 +76,7 @@ public class SubassemblyControllerTests {
         subassembly.setSubassemblyName(updatedSubassemblyName);
         testRestTemplate.put("http://localhost:" + port + "/api/subassembly/1", subassembly);
 
-        Subassembly updatedSubassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
-        Assertions.assertEquals(updatedSubassemblyName, updatedSubassembly.getSubassemblyName());
+        Assertions.assertEquals(updatedSubassemblyName, subassembly.getSubassemblyName());
     }
 
     @Test

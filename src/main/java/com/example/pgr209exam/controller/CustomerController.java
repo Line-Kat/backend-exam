@@ -66,6 +66,4 @@ public class CustomerController {
         Customer customer = customerService.createCustomerWithAddress(wrapper);
         return ResponseEntity.ok(customer);
     }
-
-
 }

@@ -21,13 +21,11 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class MachineServiceTests {
-
     @MockBean
     private MachineRepository machineRepository;
 
     @Autowired
     private MachineService machineService;
-
 
     @Test
      public void testGetMachines() {
@@ -92,7 +90,7 @@ public class MachineServiceTests {
         when(machineRepository.save(machine)).thenReturn(machine);
         Machine createdMachine = machineService.createMachine(machine);
 
-        Assertions.assertEquals(machineName, createdMachine.getMachineName());
+        Assertions.assertEquals(machine, createdMachine);
 
         machineService.deleteMachineById(1L);
         Machine deletedMachine = machineService.getMachineById(1L);

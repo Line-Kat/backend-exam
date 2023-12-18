@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/part")
 public class PartController {
     private final PartService partService;
-
     @Autowired
     public PartController(PartService partService) {
         this.partService = partService;
