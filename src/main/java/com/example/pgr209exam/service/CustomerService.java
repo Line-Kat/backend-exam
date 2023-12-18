@@ -5,6 +5,7 @@ import com.example.pgr209exam.model.Customer;
 import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.repository.AddressRepository;
 import com.example.pgr209exam.repository.CustomerRepository;
+import com.example.pgr209exam.wrapper.CustomerAddressWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,15 +38,18 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public Customer createCustomerWithAddress(Customer customer, Address address) {
-        Customer savedCustomer = customerRepository.save(customer);
-        address.getCustomers().add(savedCustomer);
-        Address savedAddress = addressRepository.save(address);
+    public Customer createCustomerWithAddress(CustomerAddressWrapper wrapper) {
+        Customer customer = wrapper.getCustomer();
+        List<Address> addresses = wrapper.getAddresses();
 
-        savedCustomer.getAddresses().add(savedAddress);
-        customerRepository.save(savedCustomer);
-
-        return savedCustomer;
+        if (addresses != null){
+            addresses.forEach(address -> {
+                Address existingAddress = addressRepository.findById(address.getAddressId())
+                        .orElseGet(() -> addressRepository.save(address));
+                customer.addAddress(existingAddress);
+            });
+        }
+        return customerRepository.save(customer);
     }
 
     public void deleteCustomerById(Long id) {

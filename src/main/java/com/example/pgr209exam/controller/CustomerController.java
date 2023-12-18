@@ -4,10 +4,12 @@ import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
 import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.service.CustomerService;
+import com.example.pgr209exam.wrapper.CustomerAddressWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -58,4 +60,12 @@ public class CustomerController {
     public Customer addOrder(@RequestBody Order order, @PathVariable Long id) {
         return customerService.addOrder(id, order);
     }
+
+    @PostMapping("/createWithAddress")
+    public ResponseEntity<Customer> createCustomerWithAddress(@RequestBody CustomerAddressWrapper wrapper){
+        Customer customer = customerService.createCustomerWithAddress(wrapper);
+        return ResponseEntity.ok(customer);
+    }
+
+
 }
