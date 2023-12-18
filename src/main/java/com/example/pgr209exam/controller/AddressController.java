@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/address")
 public class AddressController {
     private final AddressService addressService;
-
     @Autowired
     public AddressController(AddressService addressService) {
         this.addressService = addressService;

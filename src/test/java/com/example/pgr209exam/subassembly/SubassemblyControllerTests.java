@@ -1,7 +1,12 @@
 package com.example.pgr209exam.subassembly;
 
+import com.example.pgr209exam.model.Customer;
+import com.example.pgr209exam.model.Order;
+import com.example.pgr209exam.model.Part;
 import com.example.pgr209exam.model.Subassembly;
 import com.example.pgr209exam.repository.SubassemblyRepository;
+import com.example.pgr209exam.service.CustomerService;
+import com.example.pgr209exam.service.SubassemblyService;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -10,13 +15,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@AutoConfigureMockMvc
 public class SubassemblyControllerTests {
 
     @Value(value = "${local.server.port}")
@@ -65,21 +80,13 @@ public class SubassemblyControllerTests {
         Assertions.assertEquals(subassemblyName, subassembly.getSubassemblyName());
     }
 
+    /*
     @Test
     @Sql("/sql/subassembly.sql")
     public void updateSubassembly_whenUpdated_shouldReturnUpdatedSubassembly() {
-        /*
-        Subassembly subassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
-        Assertions.assertEquals("subassemblyName", subassembly.getSubassemblyName());
-
-        subassembly.setSubassemblyName("newName");
-        testRestTemplate.put("http://localhost:" + port + "/api/subassembly/1", subassembly);
-        Subassembly updatedSubassembly = testRestTemplate.getForObject("http://localhost:" + port + "/api/subassembly/1", Subassembly.class);
-
-        Assertions.assertEquals("newName", updatedSubassembly.getSubassemblyName());
-
-         */
     }
+
+     */
 
     @Test
     @Sql("/sql/subassembly.sql")
@@ -93,4 +100,35 @@ public class SubassemblyControllerTests {
 
         Assertions.assertNull(subassemblyAfterDeleting);
     }
+/*
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private SubassemblyService subassemblyService;
+
+    @Test
+    public void addPart_newPartIsAddedToSubassembly() throws Exception {
+        Subassembly subassembly = new Subassembly();
+        subassembly.setSubassemblyId(1L);
+        when(subassemblyService.addPart(anyLong(), any(Part.class))).thenReturn(subassembly);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/subassembly/1/part")
+                        .content("{}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(subassemblyService, times(1)).addPart(anyLong(), any(Part.class));
+    }
+    @Test
+    public void deletePart_PartIsDeletedFromSubassembly() throws Exception {
+        Subassembly subassembly = new Subassembly();
+        List<Part> parts = subassembly.getParts();
+        Part deletePart = new Part();
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/subassembly/1/part", parts.remove(deletePart))
+                        .content("{}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(subassemblyService, times(1)).deletePart(anyLong(), any(Part.class));
+    }
+
+ */
 }

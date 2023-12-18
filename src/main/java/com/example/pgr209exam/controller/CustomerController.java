@@ -16,7 +16,6 @@ import java.util.List;
 @RequestMapping("/api/customer")
 public class CustomerController {
     private final CustomerService customerService;
-
     @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
@@ -61,6 +60,4 @@ public class CustomerController {
     public Customer addOrder(@RequestBody Order order, @PathVariable Long id) {
         return customerService.addOrder(id, order);
     }
-
-
 }
