@@ -54,14 +54,12 @@ public class SubassemblyController {
         subassemblyService.deleteSubassemblyById(id);
     }
 
-
-
-    @PutMapping("/{id}/part")
+    @PutMapping("/{id}/add-part")
     public Subassembly addPart(@PathVariable Long id, @RequestBody Part part) {
         return subassemblyService.addPart(id, part);
     }
 
-    @DeleteMapping("/{id}/part")
+    @PutMapping("/{id}/delete-part")
     public void deletePart(@PathVariable Long id, @RequestBody Part part) {
         subassemblyService.deletePart(id, part);
     }

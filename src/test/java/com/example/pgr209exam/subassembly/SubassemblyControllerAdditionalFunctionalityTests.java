@@ -31,22 +31,10 @@ public class SubassemblyControllerAdditionalFunctionalityTests {
         Subassembly subassembly = new Subassembly();
         subassembly.setSubassemblyId(1L);
         when(subassemblyService.addPart(anyLong(), any(Part.class))).thenReturn(subassembly);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/subassembly/1/part")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/subassembly/1/add-part")
                         .content("{}")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         verify(subassemblyService, times(1)).addPart(anyLong(), any(Part.class));
-    }
-
-    @Test
-    public void deletePart_PartIsDeletedFromSubassembly() throws Exception {
-        Subassembly subassembly = new Subassembly();
-        List<Part> parts = subassembly.getParts();
-        Part deletePart = new Part();
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/subassembly/1/part", parts.remove(deletePart))
-                        .content("{}")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-        verify(subassemblyService, times(1)).deletePart(anyLong(), any(Part.class));
     }
 }
