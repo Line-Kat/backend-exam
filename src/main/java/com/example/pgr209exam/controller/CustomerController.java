@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/customer")
 public class CustomerController {
     private final CustomerService customerService;
-
     @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
@@ -67,5 +66,6 @@ public class CustomerController {
         Customer customer = customerService.createCustomerWithAddress(wrapper);
         return ResponseEntity.ok(customer);
     }
+
 
 }

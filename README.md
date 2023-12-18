@@ -6,11 +6,13 @@ main
     service (contains service class for each domain)
 test
     each domain has a folder with a file with tests for controller class and a file with tests for service class 
+    subassembly also has an own file with tests for additional functionality
     under resources is a folder with sql scripts used in the controller tests
 
 
 CONTROLLER CLASSES
 Each controller class has methods for get, getAll with pagination, update, create and delete
+
 
 ADDITIONAL FUNCTIONALITY
 Customer
@@ -20,6 +22,7 @@ Customer
 Subassembly
     addPart() - adds new part to a subassembly
     deletePart() - deletes a part from a subassembly
+
 
 TESTS
 Use @SpringBootTest in all test classes
