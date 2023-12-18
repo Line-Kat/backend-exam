@@ -14,8 +14,9 @@ Each controller class has methods for get, getAll with pagination, update, creat
 
 ADDITIONAL FUNCTIONALITY
 Customer
-    addAddressToCustomer()
-    createCustomerWithAddress()
+    addAddressToCustomer() - adds new address to a customer
+    createCustomerWithAddress() - creates a new customer with address
+    addOrder() - adds new order to a customer
 
 TESTS
 Use @SpringBootTest in all test classes
