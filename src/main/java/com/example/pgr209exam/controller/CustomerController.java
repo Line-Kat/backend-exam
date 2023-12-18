@@ -2,6 +2,7 @@ package com.example.pgr209exam.controller;
 
 import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
+import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -55,4 +56,11 @@ public class CustomerController {
     public Customer addAddressToCustomer(@RequestBody Address address, @PathVariable Long id) {
         return customerService.addAddressToCustomer(id, address);
     }
+
+    @PutMapping("/{id}/order")
+    public Customer addOrder(@RequestBody Order order, @PathVariable Long id) {
+        return customerService.addOrder(id, order);
+    }
+
+
 }

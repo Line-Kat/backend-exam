@@ -2,6 +2,7 @@ package com.example.pgr209exam.customer;
 
 import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
+import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.service.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,19 @@ public class CustomerControllerTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         verify(customerService, times(1)).addAddressToCustomer(anyLong(), any(Address.class));
+    }
+
+    @Test
+    public void addOrder_newOrderIsAddedToCustomer() throws Exception {
+
+        Customer customer = new Customer();
+        customer.setCustomerId(1L);
+        when(customerService.updateCustomer(any(Customer.class))).thenReturn(customer);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/customer/1/order")
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(customerService, times(1)).addOrder(anyLong(), any(Order.class));
     }
 }
 

@@ -2,6 +2,7 @@ package com.example.pgr209exam.service;
 
 import com.example.pgr209exam.model.Address;
 import com.example.pgr209exam.model.Customer;
+import com.example.pgr209exam.model.Order;
 import com.example.pgr209exam.repository.AddressRepository;
 import com.example.pgr209exam.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,15 @@ public class CustomerService {
         List<Address> addresses = customer.getAddresses();
         addresses.add(address);
         customer.setAddresses(addresses);
+
+        return customerRepository.save(customer);
+    }
+
+    public Customer addOrder(Long id, Order order) {
+        Customer customer = getCustomerById(id);
+        List<Order> orders = customer.getOrders();
+        orders.add(order);
+        customer.setOrders(orders);
 
         return customerRepository.save(customer);
     }
